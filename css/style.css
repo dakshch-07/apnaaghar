@@ -2621,6 +2621,244 @@ a {
   }
 }
 
+/* 18c. SERVICE DETAILS MODAL */
+.service-details-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
+}
+
+.service-details-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.service-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(17, 17, 17, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.service-modal-wrapper {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  background-color: var(--background-beige);
+  border: 1px solid var(--borders-beige);
+  border-radius: 8px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  overflow-y: auto;
+  transform: scale(0.9) translateY(30px);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-details-modal.open .service-modal-wrapper {
+  transform: scale(1) translateY(0);
+}
+
+.service-modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  color: var(--text-charcoal);
+  cursor: pointer;
+  z-index: 10;
+  transition: var(--transition-fast);
+  line-height: 1;
+}
+
+.service-modal-close-btn:hover {
+  color: var(--primary-gold);
+  transform: rotate(90deg);
+}
+
+.service-modal-container {
+  padding: 3rem;
+}
+
+.service-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--borders-beige);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.service-modal-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background-color: var(--accent-beige);
+  color: var(--primary-gold);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-subtle);
+}
+
+.service-modal-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-modal-title {
+  font-size: 2.4rem;
+  color: var(--secondary-black);
+  line-height: 1.2;
+}
+
+.service-modal-tagline {
+  font-family: var(--font-subheading);
+  font-size: 0.8rem;
+  color: var(--text-gray);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.service-modal-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.service-modal-section-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--secondary-black);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.service-modal-section-title i {
+  color: var(--primary-gold);
+}
+
+.service-modal-desc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-charcoal);
+}
+
+.service-modal-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.service-modal-list li {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text-charcoal);
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+.service-modal-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--primary-gold);
+  font-weight: bold;
+}
+
+.service-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  border-top: 1px solid var(--borders-beige);
+  padding-top: 2rem;
+}
+
+.btn-whatsapp-modal {
+  background-color: #25D366;
+  color: var(--card-white) !important;
+}
+
+.btn-whatsapp-modal:hover {
+  background-color: #128C7E;
+  transform: translateY(-2px);
+}
+
+/* Responsive Service Modal styling */
+@media (max-width: 768px) {
+  .service-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .service-modal-header {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .service-modal-title {
+    font-size: 2rem;
+  }
+  
+  .service-modal-container {
+    padding: 2rem;
+  }
+  
+  .service-modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .service-modal-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-modal-close-btn {
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 2rem;
+  }
+  
+  .service-modal-title {
+    font-size: 1.7rem;
+  }
+  
+  .service-modal-container {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
 /* 19. RESPONSIVENESS & BREAKPOINTS */
 
 /* Tablet & Smaller Laptops */

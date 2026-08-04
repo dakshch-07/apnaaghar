@@ -683,49 +683,49 @@
 
         <div class="services-grid">
           <!-- Service 1 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-1">
             <div class="service-icon"><i class="fa-solid fa-house-chimney-window"></i></div>
             <h3 class="service-name">Buying</h3>
             <p class="service-text">Access exclusive listings in Chembur, Tilak Nagar, and wider Mumbai with verified title clearance.</p>
           </div>
           <!-- Service 2 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-2">
             <div class="service-icon"><i class="fa-solid fa-tags"></i></div>
             <h3 class="service-name">Selling</h3>
             <p class="service-text">List your luxury property with us to gain premium digital positioning and secure high-value transactions.</p>
           </div>
           <!-- Service 3 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-3">
             <div class="service-icon"><i class="fa-solid fa-key"></i></div>
             <h3 class="service-name">Renting</h3>
             <p class="service-text">Premium leasing support for residential apartments, villas, and commercial shops with customized agreements.</p>
           </div>
           <!-- Service 4 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-4">
             <div class="service-icon"><i class="fa-solid fa-briefcase"></i></div>
             <h3 class="service-name">Investment Consulting</h3>
             <p class="service-text">Consultations on commercial high-yield investments, pre-RERA listings, and capital gain reinvestment plans.</p>
           </div>
           <!-- Service 5 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-5">
             <div class="service-icon"><i class="fa-solid fa-calculator"></i></div>
             <h3 class="service-name">Property Valuation</h3>
             <p class="service-text">Accurate property evaluation reports utilizing current localized pricing indices and supply-demand trends.</p>
           </div>
           <!-- Service 6 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-6">
             <div class="service-icon"><i class="fa-solid fa-file-contract"></i></div>
             <h3 class="service-name">Legal Documentation</h3>
             <p class="service-text">Complete administrative support for property title searches, deeds, mutations, and structural audits.</p>
           </div>
           <!-- Service 7 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-7">
             <div class="service-icon"><i class="fa-solid fa-percent"></i></div>
             <h3 class="service-name">Home Loan Support</h3>
             <p class="service-text">End-to-end liaison with top banking partners to process and sanction loans at competitive interest rates.</p>
           </div>
           <!-- Service 8 -->
-          <div class="service-card reveal-el">
+          <div class="service-card reveal-el" data-service-id="service-8">
             <div class="service-icon"><i class="fa-solid fa-pen-nib"></i></div>
             <h3 class="service-name">Registration Assistance</h3>
             <p class="service-text">Smooth stamp duty estimation, online payment tracking, slot bookings, and registration office assistance.</p>
@@ -1227,6 +1227,54 @@
               </button>
             </div>
           </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE DETAILS MODAL -->
+  <div class="service-details-modal" id="service-details-modal" aria-hidden="true" role="dialog">
+    <div class="service-modal-overlay" id="service-modal-overlay"></div>
+    <div class="service-modal-wrapper">
+      <button class="service-modal-close-btn" id="service-modal-close-btn" aria-label="Close modal">&times;</button>
+      <div class="service-modal-container">
+        
+        <div class="service-modal-header">
+          <div class="service-modal-icon-wrapper" id="service-modal-icon">
+            <i class="fa-solid fa-house-chimney-window"></i>
+          </div>
+          <div class="service-modal-title-group">
+            <h2 class="service-modal-title text-cormorant" id="service-modal-title">Buying Assistance</h2>
+            <p class="service-modal-tagline" id="service-modal-tagline">Secure your dream home with expert guidance.</p>
+          </div>
+        </div>
+
+        <div class="service-modal-grid">
+          <!-- Overview -->
+          <div class="service-modal-overview-panel">
+            <h3 class="service-modal-section-title"><i class="fa-solid fa-circle-info"></i> Service Overview</h3>
+            <p class="service-modal-desc" id="service-modal-desc">
+              Detailed description of the service goes here...
+            </p>
+          </div>
+
+          <!-- Scope -->
+          <div class="service-modal-scope-panel">
+            <h3 class="service-modal-section-title"><i class="fa-solid fa-list-check"></i> What We Cover</h3>
+            <ul class="service-modal-list" id="service-modal-scope">
+              <!-- Scope items list -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-modal-footer">
+          <button class="btn btn-gold btn-large magnetic" id="service-inquire-btn">
+            Enquire Now <i class="fa-solid fa-paper-plane"></i>
+          </button>
+          <a href="#" class="btn btn-whatsapp-modal btn-large magnetic" id="service-whatsapp-btn" target="_blank" rel="noopener">
+            WhatsApp Us <i class="fa-brands fa-whatsapp"></i>
+          </a>
         </div>
 
       </div>

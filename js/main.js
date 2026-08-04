@@ -1058,4 +1058,239 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 350);
     });
   }
+
+  /* ------------------------------------------------------------------------
+     15. SERVICE DETAILS MODAL SYSTEM
+     ------------------------------------------------------------------------ */
+  const servicesData = {
+    "service-1": {
+      title: "Buying Assistance",
+      icon: "fa-house-chimney-window",
+      tagline: "Secure your dream home with end-to-end expert guidance.",
+      desc: "Navigating the Mumbai real estate market can be complex. Our Buying Assistance service ensures a safe, seamless, and transparent journey. We help you search, evaluate, and acquire premium properties in Chembur, Tilak Nagar, Ghatkopar, and wider Mumbai with complete peace of mind.",
+      scope: [
+        "Access to verified premium listings (residential & commercial).",
+        "Rigorous 30-year property title clearance check.",
+        "Price negotiation support to secure the best value.",
+        "Assistance with loan approvals and financial planning.",
+        "Complete coordination for stamp duty and final registration."
+      ]
+    },
+    "service-2": {
+      title: "Selling & Marketing Assistance",
+      icon: "fa-tags",
+      tagline: "Get premium positioning and high-value closures.",
+      desc: "Unlock the true value of your luxury residential or commercial property. We use modern digital marketing strategies, targeted local outreach, and our extensive broker network to connect you with qualified buyers and secure faster closures at premium valuations.",
+      scope: [
+        "Detailed property valuation to set the optimal listing price.",
+        "High-definition photography and virtual tour creation.",
+        "Premium positioning on leading real estate portals.",
+        "Pre-vetting and screening of potential buyers.",
+        "End-to-end deal structuring and documentation support."
+      ]
+    },
+    "service-3": {
+      title: "Leasing & Rental Services",
+      icon: "fa-key",
+      tagline: "Smooth rental placements for tenants and landlords.",
+      desc: "Whether you are a landlord looking for reliable tenants or a tenant looking for a premium home or commercial space, we handle the entire matching process. We focus on Tilak Nagar, Chembur, and surrounding areas to find safe, respectful, and high-yield rentals.",
+      scope: [
+        "Extensive database of rental apartments, penthouses, and shops.",
+        "Tenant background verification and profile checks.",
+        "Customized rental agreement drafting and online registrations.",
+        "Cooperative society NOC and police verification processing.",
+        "Yearly rental renewals and deposit management support."
+      ]
+    },
+    "service-4": {
+      title: "Investment Portfolio Advisory",
+      icon: "fa-briefcase",
+      tagline: "Maximize capital growth and rental yields.",
+      desc: "Make informed real estate investments. We analyze local market micro-trends, localized supply-demand metrics, upcoming infrastructure developments (like SCLR connectors and Metro line 4), and RERA listings to construct high-yield portfolios with minimum risks.",
+      scope: [
+        "Identifying under-construction projects with high capital growth potential.",
+        "Advisory on pre-leased commercial assets with immediate yield.",
+        "Guidance on Section 54 EC bonds and capital gain tax planning.",
+        "Comprehensive risk assessment and RERA legal checks.",
+        "Custom portfolio building for both domestic and NRI investors."
+      ]
+    },
+    "service-5": {
+      title: "Property Valuation Services",
+      icon: "fa-calculator",
+      tagline: "Accurate property valuation based on real-time market data.",
+      desc: "Understanding the exact worth of a property is essential for transactions, legal clearances, and taxation. Our valuation team delivers certified valuation reports utilizing current localized pricing indices and real-time transaction data.",
+      scope: [
+        "Comparative market analysis based on recent localized sales.",
+        "Depreciated cost calculation for older structural assets.",
+        "Certified valuation reports for bank loan processing.",
+        "Capital gains tax assessment support.",
+        "Fair market valuation for partition deeds and family settlements."
+      ]
+    },
+    "service-6": {
+      title: "RERA Title & Legal Verification",
+      icon: "fa-file-contract",
+      tagline: "Meticulous legal vetting and RERA title checks.",
+      desc: "Real estate transactions involve massive legal documentation. We provide expert legal support, conducting thorough title searches, RERA compliance checks, and drafting custom sale agreements to shield you from litigation and ownership disputes.",
+      scope: [
+        "30-year search report of the property registry.",
+        "Vetting of developer layouts, floor plans, and CC/OC certificates.",
+        "Drafting custom Sale Agreements, Gift Deeds, and Power of Attorneys.",
+        "Verification of property card status and land records.",
+        "Resolution of inheritance disputes and title mutations."
+      ]
+    },
+    "service-7": {
+      title: "Home Loan & Finance Liaison",
+      icon: "fa-percent",
+      tagline: "Get the best loan interest rates and swift disbursements.",
+      desc: "Don't let finance hold you back from your dream home. We maintain direct relationships with top public and private banking partners to help you secure home loans at competitive rates, with minimal paperwork and faster approvals.",
+      scope: [
+        "Comparative analysis of home loan offers from multiple banks.",
+        "Step-by-step assistance in loan documentation and submissions.",
+        "Swift processing for self-employed and salaried applicants.",
+        "Liaison with bank legal and technical evaluation teams.",
+        "Support for loan transfers (balance transfer) and top-up loans."
+      ]
+    },
+    "service-8": {
+      title: "Stamp Duty & Property Registration",
+      icon: "fa-pen-nib",
+      tagline: "Seamless stamp duty calculations and sub-registrar slot bookings.",
+      desc: "Avoid long waiting hours at government offices. Our team handles the entire sub-registrar registration process, from calculating correct stamp duty values, paying online challans, booking registry slots, to accompanying you to the registrar office for final sign-off.",
+      scope: [
+        "Precise calculation of stamp duty and registration fees.",
+        "Safe online payments of government challans (GRAS).",
+        "Online slot booking for registration appointments.",
+        "Physical presence and assistance of a coordinator at the Sub-Registrar office.",
+        "Timely collection and delivery of registered original deeds."
+      ]
+    }
+  };
+
+  const serviceModal = document.getElementById('service-details-modal');
+  const serviceCloseBtn = document.getElementById('service-modal-close-btn');
+  const serviceOverlay = document.getElementById('service-modal-overlay');
+  const serviceInquireBtn = document.getElementById('service-inquire-btn');
+  const serviceWhatsappBtn = document.getElementById('service-whatsapp-btn');
+  
+  let activeServiceTitle = "";
+
+  function openServiceModal(id) {
+    const data = servicesData[id];
+    if (!data || !serviceModal) return;
+
+    activeServiceTitle = data.title;
+
+    // Populate header
+    document.getElementById('service-modal-title').textContent = data.title;
+    document.getElementById('service-modal-tagline').textContent = data.tagline;
+    document.getElementById('service-modal-desc').textContent = data.desc;
+    
+    // Set Icon
+    const iconWrapper = document.getElementById('service-modal-icon');
+    if (iconWrapper) {
+      iconWrapper.innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
+    }
+
+    // Populate Scope list
+    const scopeUl = document.getElementById('service-modal-scope');
+    if (scopeUl) {
+      scopeUl.innerHTML = '';
+      data.scope.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        scopeUl.appendChild(li);
+      });
+    }
+
+    // Configure WhatsApp Link
+    if (serviceWhatsappBtn) {
+      const whatsappText = encodeURIComponent(`Hi Apnaa Ghar Team, I am interested in inquiring about your "${data.title}" service. Please share details on how to proceed.`);
+      serviceWhatsappBtn.href = `https://wa.me/917021316956?text=${whatsappText}`;
+    }
+
+    // Open Modal
+    serviceModal.classList.add('open');
+    serviceModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; // Disable scroll
+
+    // GSAP Animation if available
+    if (typeof gsap !== 'undefined') {
+      gsap.fromTo('.service-modal-wrapper', 
+        { scale: 0.9, y: 30, opacity: 0 },
+        { scale: 1, y: 0, opacity: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' }
+      );
+    }
+  }
+
+  function closeServiceModal() {
+    if (!serviceModal) return;
+    
+    if (typeof gsap !== 'undefined') {
+      gsap.to('.service-modal-wrapper', {
+        scale: 0.9,
+        y: 30,
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power2.in',
+        overwrite: 'auto',
+        onComplete: () => {
+          serviceModal.classList.remove('open');
+          serviceModal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = 'auto'; // Restore scroll
+        }
+      });
+    } else {
+      serviceModal.classList.remove('open');
+      serviceModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = 'auto'; // Restore scroll
+    }
+  }
+
+  // Bind service card click triggers
+  const serviceCards = document.querySelectorAll('.service-card');
+  serviceCards.forEach(card => {
+    const id = card.getAttribute('data-service-id');
+    
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (id) openServiceModal(id);
+    });
+  });
+
+  // Bind modal closing triggers
+  if (serviceCloseBtn) serviceCloseBtn.addEventListener('click', closeServiceModal);
+  if (serviceOverlay) serviceOverlay.addEventListener('click', closeServiceModal);
+
+  // Close on Escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && serviceModal && serviceModal.classList.contains('open')) {
+      closeServiceModal();
+    }
+  });
+
+  // Bind Enquire Button Action
+  if (serviceInquireBtn) {
+    serviceInquireBtn.addEventListener('click', () => {
+      closeServiceModal();
+      
+      setTimeout(() => {
+        const contactSection = document.getElementById('contact');
+        const messageTextarea = document.getElementById('client-message');
+        
+        if (messageTextarea) {
+          messageTextarea.value = `Hi, I am interested in inquiring about your "${activeServiceTitle}" service. Please share details on what documents are required and service charges.`;
+          messageTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        if (contactSection) {
+          contactSection.scrollIntoView({ behavior: 'smooth' });
+          const nameInput = document.querySelector('input[name="name"]');
+          if (nameInput) setTimeout(() => nameInput.focus(), 800);
+        }
+      }, 350);
+    });
+  }
 });
