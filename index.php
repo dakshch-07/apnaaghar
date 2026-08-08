@@ -1,3 +1,47 @@
+<?php
+require_once 'includes/db.php';
+
+// Fetch Properties (Limit to 3 for Homepage)
+$stmt = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC LIMIT 3");
+$properties = $stmt->fetchAll();
+
+// Build JSON object for the GSAP frontend modals
+$propertiesJsonObj = [];
+foreach ($properties as $prop) {
+    $propId = 'property-' . $prop['id'];
+    $propertiesJsonObj[$propId] = [
+        'title' => $prop['title'],
+        'type' => $prop['type'],
+        'location' => $prop['location'],
+        'price' => $prop['price'],
+        'image' => (strpos($prop['image_url'], 'http') === 0) ? $prop['image_url'] : $prop['image_url'],
+        'status' => $prop['status'],
+        'configs' => [
+            [
+                'type' => $prop['bhk'],
+                'size' => $prop['size'],
+                'price' => $prop['price']
+            ]
+        ],
+        'highlights' => json_decode($prop['highlights_json'], true) ?: [],
+        'connectivity' => json_decode($prop['connectivity_json'], true) ?: []
+    ];
+}
+
+// Fetch Gallery
+$g_stmt = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC");
+$gallery_items = $g_stmt->fetchAll();
+
+// Fetch Category Counts
+$stmtApt = $pdo->query("SELECT COUNT(*) FROM properties WHERE type LIKE '%Apartment%' OR type LIKE '%Tower%' OR type LIKE '%Project%' OR type LIKE '%Residences%' OR type LIKE '%Duplex%'");
+$aptCount = $stmtApt->fetchColumn();
+
+$stmtComm = $pdo->query("SELECT COUNT(*) FROM properties WHERE type LIKE '%Commercial%' OR type LIKE '%Office%'");
+$commCount = $stmtComm->fetchColumn();
+
+$stmtVilla = $pdo->query("SELECT COUNT(*) FROM properties WHERE type LIKE '%Villa%' OR type LIKE '%Bungalow%'");
+$villaCount = $stmtVilla->fetchColumn();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,8 +79,13 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style_v2.css">
+
+  <script>
+    // Inject dynamic properties data for GSAP modals
+    
+  </script>
 
   <!-- SEO Structured Data Schema (JSON-LD) -->
   <script type="application/ld+json">
@@ -149,7 +198,7 @@
       <button class="drawer-close" id="drawer-close">&times;</button>
     </div>
     <nav class="mobile-drawer-nav">
-      <a href="#home" class="mobile-link">Home</a>
+      <a href="#home" class="mobile-link active">Home</a>
       <a href="#properties" class="mobile-link">Properties</a>
       <a href="#about" class="mobile-link">About Us</a>
       <a href="#categories" class="mobile-link">Categories</a>
@@ -231,229 +280,43 @@
         </div>
 
         <div class="properties-grid">
-          <!-- Property Card 1 -->
-          <div class="property-card reveal-el" data-property-id="property-1">
+          <?php foreach($properties as $prop): ?>
+          <div class="property-card reveal-el" data-property-id="property-<?php echo $prop['id']; ?>">
             <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80" alt="The Grand Horizon Residency" class="property-img">
+              <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : $prop['image_url']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
               <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">EXCLUSIVES</span>
+                <?php if(!empty($prop['badge_status'])): ?>
+                <span class="badge-status <?php echo $prop['badge_status'] == 'FOR RENT' ? 'for-rent' : 'for-sale'; ?>"><?php echo htmlspecialchars($prop['badge_status']); ?></span>
+                <?php endif; ?>
+                <?php if(!empty($prop['badge_featured'])): ?>
+                <span class="badge-featured"><?php echo htmlspecialchars($prop['badge_featured']); ?></span>
+                <?php endif; ?>
               </div>
               <button class="bookmark-btn" aria-label="Bookmark property">
                 <i class="fa-regular fa-bookmark"></i>
               </button>
             </div>
             <div class="property-content">
-              <div class="property-type-tag">Luxury Tower</div>
-              <h3 class="property-title">The Grand Horizon Residency</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Shell Colony, Chembur, Mumbai</p>
+              <div class="property-type-tag"><?php echo htmlspecialchars($prop['type']); ?></div>
+              <h3 class="property-title"><?php echo htmlspecialchars($prop['title']); ?></h3>
+              <p class="property-location"><i class="fa-solid fa-location-dot"></i> <?php echo htmlspecialchars($prop['location']); ?></p>
               <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 3 BHK</span>
-                <span><i class="fa-solid fa-bath"></i> 3 Bath</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 1,450 sqft</span>
+                <span><i class="fa-solid fa-bed"></i> <?php echo htmlspecialchars($prop['bhk']); ?></span>
+                <span><i class="fa-solid fa-ruler-combined"></i> <?php echo htmlspecialchars($prop['size']); ?></span>
               </div>
               <div class="property-card-footer">
-                <div class="property-price">₹3.45 Cr</div>
+                <div class="property-price"><?php echo htmlspecialchars($prop['price']); ?></div>
                 <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
           </div>
-
-          <!-- Property Card 2 -->
-          <div class="property-card reveal-el" data-property-id="property-2">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" alt="Symphony Sky Villa" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">PREMIUM</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Luxury Penthouse</div>
-              <h3 class="property-title">Symphony Sky Villa</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Tilak Nagar, Chembur, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 4 BHK</span>
-                <span><i class="fa-solid fa-bath"></i> 4 Bath</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 2,200 sqft</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹5.20 Cr</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Property Card 3 -->
-          <div class="property-card reveal-el" data-property-id="property-3">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80" alt="Elegance Court Duplex" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-rent">FOR RENT</span>
-                <span class="badge-featured">POPULAR</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Builder Floor</div>
-              <h3 class="property-title">Elegance Court Duplex</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Union Park, Chembur, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 3 BHK</span>
-                <span><i class="fa-solid fa-bath"></i> 4 Bath</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 1,850 sqft</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹1.25 L/Mo</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Property Card 4 -->
-          <div class="property-card reveal-el" data-property-id="property-4">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Emerald Gardens Heights" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">NEW</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Apartment</div>
-              <h3 class="property-title">Emerald Gardens Heights</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Ghatkopar East, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 2 BHK</span>
-                <span><i class="fa-solid fa-bath"></i> 2 Bath</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 950 sqft</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹2.10 Cr</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Property Card 5 -->
-          <div class="property-card reveal-el" data-property-id="property-5">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" alt="Urban Retreat Penthouse" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">EXCLUSIVE</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Luxury Penthouse</div>
-              <h3 class="property-title">Urban Retreat Penthouse</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Kurla West, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 4 BHK</span>
-                <span><i class="fa-solid fa-bath"></i> 4 Bath</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 2,500 sqft</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹4.85 Cr</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Property Card 6 -->
-          <div class="property-card reveal-el" data-property-id="property-6">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80" alt="Charming Colonial Bungalow" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">HERITAGE</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Luxury Villa</div>
-              <h3 class="property-title">Charming Colonial Bungalow</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Deonar, Chembur, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 5 BHK</span>
-                <span><i class="fa-solid fa-bath"></i> 6 Bath</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 4,500 sqft</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹12.00 Cr</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Property Card 7 -->
-          <div class="property-card reveal-el" data-property-id="property-7">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80" alt="The Signature Aura (Chembur)" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">OC RECEIVED</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Residential Project</div>
-              <h3 class="property-title">The Signature Aura (Chembur)</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> Near Freeway & SCLR, Chembur, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-bed"></i> 2 BHK</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 611 - 829 sqft</span>
-                <span><i class="fa-solid fa-building"></i> Ready Possession</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹1.94 Cr+</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Property Card 8 -->
-          <div class="property-card reveal-el" data-property-id="property-8">
-            <div class="property-image-box">
-              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Hyper-Connected Offices" class="property-img">
-              <div class="property-badge-group">
-                <span class="badge-status for-sale">FOR SALE</span>
-                <span class="badge-featured">CC RECEIVED</span>
-              </div>
-              <button class="bookmark-btn" aria-label="Bookmark property">
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-            </div>
-            <div class="property-content">
-              <div class="property-type-tag">Commercial Project</div>
-              <h3 class="property-title">Hyper-Connected Offices</h3>
-              <p class="property-location"><i class="fa-solid fa-location-dot"></i> SCLR & EEH Junction, Chembur, Mumbai</p>
-              <div class="property-features">
-                <span><i class="fa-solid fa-briefcase"></i> Offices</span>
-                <span><i class="fa-solid fa-ruler-combined"></i> 245 - 817 sqft</span>
-                <span><i class="fa-solid fa-building-user"></i> 15 Stories</span>
-              </div>
-              <div class="property-card-footer">
-                <div class="property-price">₹73 L+</div>
-                <a href="#contact" class="btn-card-link magnetic">Know More <i class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
+          <?php endforeach; ?>
+        </div>
+        
+        <div class="text-center reveal-el" style="margin-top: 40px;">
+          <a href="properties.php" class="btn btn-gold btn-large magnetic">
+            View All Properties <i class="fa-solid fa-arrow-right"></i>
+          </a>
         </div>
       </div>
     </section>
@@ -473,7 +336,7 @@
             <!-- Counter Badges -->
             <div class="stats-badge-floating magnetic">
               <div class="stats-icon"><i class="fa-solid fa-handshake"></i></div>
-              <h4 class="counter-val" data-target="500">0</h4>
+              <h4 class="counter-val" data-target="1250">0</h4>
               <span>Happy Families Served</span>
             </div>
           </div>
@@ -483,6 +346,22 @@
             <span class="section-tag">About Apnaa Ghar</span>
             <h2 class="section-title text-cormorant">Crafting Lifestyles & Securing Legacies</h2>
             <div class="title-underline left"></div>
+            
+            <!-- Stats Grid with Counter Animations -->
+            <div class="about-stats-grid">
+              <div class="stat-card-box">
+                <h3 class="stat-num"><span class="counter-val" data-target="15">0</span>+</h3>
+                <p class="stat-lbl">Years Experience</p>
+              </div>
+              <div class="stat-card-box">
+                <h3 class="stat-num"><span class="counter-val" data-target="350">0</span>+</h3>
+                <p class="stat-lbl">Properties Sold</p>
+              </div>
+              <div class="stat-card-box">
+                <h3 class="stat-num"><span class="counter-val" data-target="4.9">0.0</span>/5</h3>
+                <p class="stat-lbl">Google Rating</p>
+              </div>
+            </div>
             
             <p class="about-narrative">
               With deep-rooted expertise in Chembur and surrounding suburbs of Mumbai, Apnaa Ghar Real Estate has established a benchmark of absolute transparency, personalized advice, and customer-first guidance.
@@ -508,21 +387,7 @@
               </div>
             </div>
 
-            <!-- Stats Grid with Counter Animations -->
-            <div class="about-stats-grid">
-              <div class="stat-card-box">
-                <h3 class="stat-num"><span class="counter-val" data-target="10">0</span>+</h3>
-                <p class="stat-lbl">Years Experience</p>
-              </div>
-              <div class="stat-card-box">
-                <h3 class="stat-num"><span class="counter-val" data-target="100">0</span>+</h3>
-                <p class="stat-lbl">Properties Sold</p>
-              </div>
-              <div class="stat-card-box">
-                <h3 class="stat-num"><span class="counter-val" data-target="49">0</span>/5</h3>
-                <p class="stat-lbl">Google Rating</p>
-              </div>
-            </div>
+
             
             <a href="#contact" class="btn btn-gold btn-inline-link magnetic">Consult Our Expert <i class="fa-solid fa-arrow-right"></i></a>
           </div>
@@ -609,8 +474,8 @@
             <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80" alt="Premium Apartments" class="cat-img">
             <div class="cat-overlay">
               <h3 class="cat-title">Apartments</h3>
-              <p class="cat-count">140+ Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
+              <p class="cat-count"><?php echo $aptCount; ?>+ Listed</p>
+              <a href="properties.php?bhk=all" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
           <!-- Cat 2 -->
@@ -618,8 +483,8 @@
             <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Commercial Offices" class="cat-img">
             <div class="cat-overlay">
               <h3 class="cat-title">Commercial</h3>
-              <p class="cat-count">48 Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
+              <p class="cat-count"><?php echo $commCount; ?> Listed</p>
+              <a href="properties.php?bhk=commercial" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
           <!-- Cat 3 -->
@@ -627,44 +492,8 @@
             <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=600&q=80" alt="Luxury Villas" class="cat-img">
             <div class="cat-overlay">
               <h3 class="cat-title">Luxury Villas</h3>
-              <p class="cat-count">24 Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-          <!-- Cat 4 -->
-          <div class="category-box reveal-el">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" alt="Builder Floors" class="cat-img">
-            <div class="cat-overlay">
-              <h3 class="cat-title">Builder Floors</h3>
-              <p class="cat-count">36 Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-          <!-- Cat 5 -->
-          <div class="category-box reveal-el">
-            <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=600&q=80" alt="Premium Plots" class="cat-img">
-            <div class="cat-overlay">
-              <h3 class="cat-title">Plots</h3>
-              <p class="cat-count">18 Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-          <!-- Cat 6 -->
-          <div class="category-box reveal-el">
-            <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80" alt="Rental Homes" class="cat-img">
-            <div class="cat-overlay">
-              <h3 class="cat-title">Rental Homes</h3>
-              <p class="cat-count">85 Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-          </div>
-          <!-- Cat 7 -->
-          <div class="category-box reveal-el">
-            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Investment Properties" class="cat-img">
-            <div class="cat-overlay">
-              <h3 class="cat-title">Investment Properties</h3>
-              <p class="cat-count">52 Listed</p>
-              <a href="#properties" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
+              <p class="cat-count"><?php echo $villaCount; ?> Listed</p>
+              <a href="properties.php?bhk=all" class="cat-link magnetic"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
@@ -843,79 +672,18 @@
 
         <!-- Masonry Grid -->
         <div class="gallery-masonry reveal-el" id="gallery-masonry">
-          
-          <!-- Item 1 (Office) -->
-          <div class="gallery-item" data-category="office">
+          <?php foreach($gallery_items as $item): ?>
+          <div class="gallery-item" data-category="<?php echo strtolower($item['category'] == 'Site Visits' ? 'visits' : $item['category']); ?>">
             <div class="gallery-img-box">
-              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Apnaa Ghar Modern Chembur Office Lounge" class="gallery-img">
+              <img src="<?php echo strpos($item['image_url'], 'http') === 0 ? $item['image_url'] : $item['image_url']; ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" class="gallery-img">
               <div class="gallery-item-overlay">
-                <span class="gallery-cat">Our Office</span>
-                <h4>Apnaa Ghar Chembur Lounge</h4>
+                <span class="gallery-cat"><?php echo htmlspecialchars($item['category']); ?></span>
+                <h4><?php echo htmlspecialchars($item['title']); ?></h4>
                 <div class="lightbox-trigger-btn"><i class="fa-solid fa-expand"></i></div>
               </div>
             </div>
           </div>
-
-          <!-- Item 2 (Properties) -->
-          <div class="gallery-item" data-category="properties">
-            <div class="gallery-img-box">
-              <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" alt="Luxury Villa Exterior View" class="gallery-img">
-              <div class="gallery-item-overlay">
-                <span class="gallery-cat">Properties</span>
-                <h4>Luxury Villa Exterior, Mumbai</h4>
-                <div class="lightbox-trigger-btn"><i class="fa-solid fa-expand"></i></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 3 (Clients) -->
-          <div class="gallery-item" data-category="clients">
-            <div class="gallery-img-box">
-              <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80" alt="Professional Real Estate Consultation meeting" class="gallery-img">
-              <div class="gallery-item-overlay">
-                <span class="gallery-cat">Clients</span>
-                <h4>Fulfilling Dreams of Mumbai Families</h4>
-                <div class="lightbox-trigger-btn"><i class="fa-solid fa-expand"></i></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 4 (Site Visits) -->
-          <div class="gallery-item" data-category="visits">
-            <div class="gallery-img-box">
-              <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="Client site visit consultation" class="gallery-img">
-              <div class="gallery-item-overlay">
-                <span class="gallery-cat">Site Visits</span>
-                <h4>Consultation on site locations</h4>
-                <div class="lightbox-trigger-btn"><i class="fa-solid fa-expand"></i></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 5 (Properties) -->
-          <div class="gallery-item" data-category="properties">
-            <div class="gallery-img-box">
-              <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" alt="Ultra Luxury Living Room Interior" class="gallery-img">
-              <div class="gallery-item-overlay">
-                <span class="gallery-cat">Properties</span>
-                <h4>Stunning Penthouse Living Room</h4>
-                <div class="lightbox-trigger-btn"><i class="fa-solid fa-expand"></i></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 6 (Site Visits) -->
-          <div class="gallery-item" data-category="visits">
-            <div class="gallery-img-box">
-              <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80" alt="High-rise building tower site visit" class="gallery-img">
-              <div class="gallery-item-overlay">
-                <span class="gallery-cat">Site Visits</span>
-                <h4>Drone and site surveys, Chembur</h4>
-                <div class="lightbox-trigger-btn"><i class="fa-solid fa-expand"></i></div>
-              </div>
-            </div>
-          </div>
-
+          <?php endforeach; ?>
         </div>
       </div>
     </section>
@@ -1286,6 +1054,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   
   <!-- Main Script -->
-  <script src="js/main.js"></script>
+  <script src="js/main_v2.js"></script>
 </body>
 </html>

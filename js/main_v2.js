@@ -408,37 +408,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Stats counter trigger
-    initCounterAnimations();
-  }
-
-  /* ------------------------------------------------------------------------
-     7. STATISTICS COUNT-UP COUNTERS
-     ------------------------------------------------------------------------ */
-  function initCounterAnimations() {
-    const counters = document.querySelectorAll('.counter-val');
-    counters.forEach((counter) => {
-      const target = parseInt(counter.getAttribute('data-target'), 10);
-      
-      gsap.from(counter, {
-        textContent: 0,
-        duration: 2.5,
-        ease: "power2.out",
-        snap: { textContent: 1 },
-        scrollTrigger: {
-          trigger: counter,
-          start: "top 92%",
-          toggleActions: "play none none none"
-        },
-        onUpdate: function() {
-          // Add decimals back for 4.9 rating
-          if (target === 49) {
-            let val = parseFloat(counter.textContent) / 10;
-            counter.textContent = val.toFixed(1);
-          }
-        }
-      });
-    });
   }
 
   /* ------------------------------------------------------------------------
@@ -1882,3 +1851,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
