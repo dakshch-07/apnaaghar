@@ -1,14 +1,13 @@
 <?php
 // Database configuration
-// For local development: use localhost, apnaaghar_db, root, and empty password.
-// For production (InfinityFree): replace with your cPanel MySQL details.
-$host = 'sql209.infinityfree.com'; 
-$dbname = 'if0_42621643_apnaaghar_db'; 
-$username = 'rootif0_42621643'; 
-$password = 'Manaksh1507 '; 
+$host = getenv('DB_HOST') ?: 'localhost'; 
+$dbname = getenv('DB_NAME') ?: 'apnaaghar_db'; 
+$username = getenv('DB_USER') ?: 'root'; 
+$password = getenv('DB_PASS') ?: ''; 
+$port = getenv('DB_PORT') ?: '3306';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
     // Set the PDO error mode to exception
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // Fetch associative arrays by default
