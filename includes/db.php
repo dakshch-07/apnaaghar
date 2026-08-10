@@ -2,9 +2,9 @@
 // Database configuration
 // For local development: use localhost, apnaaghar_db, root, and empty password.
 // For production (InfinityFree): replace with your cPanel MySQL details.
-$host = 'localhost'; 
-$dbname = 'apnaaghar_db'; 
-$username = 'root'; 
+$host = 'sql209.infinityfree.com'; 
+$dbname = 'if0_42621643_apnaaghar_db'; 
+$username = 'rootif0_42621643'; 
 $password = ''; 
 
 try {
