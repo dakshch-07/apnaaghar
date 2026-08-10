@@ -5,7 +5,7 @@
 $host = 'sql209.infinityfree.com'; 
 $dbname = 'if0_42621643_apnaaghar_db'; 
 $username = 'rootif0_42621643'; 
-$password = ''; 
+$password = 'Manaksh1507 '; 
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
