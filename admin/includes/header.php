@@ -22,17 +22,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #111111;
-            --sidebar-hover: #1a1a1a;
-            --sidebar-active: #0F5C4A;
+            --sidebar-bg: #11223b;
+            --sidebar-hover: rgba(255,255,255,0.05);
+            --sidebar-active: #C79A4A;
             --sidebar-text: #FFFFFF;
             --sidebar-muted: #B0B0B0;
             --content-bg: #F8F8F6;
             --card-bg: #FFFFFF;
             --card-border: #E8E3DA;
             --card-shadow: 0 4px 30px rgba(0,0,0,0.03);
-            --primary: #0F5C4A;
-            --primary-hover: #0C4A3B;
+            --primary: #C79A4A;
+            --primary-hover: #B8893A;
             --text-heading: #1C1C1C;
             --text-body: #6A6A6A;
             
@@ -65,12 +65,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            z-index: 100;
+            z-index: 100; border-right: 1px solid var(--primary);
         }
         
         .sidebar-header {
             padding: 2rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--card-border);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -110,6 +110,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
         .nav-link:hover, .nav-link.active { color: var(--sidebar-text); }
         .nav-link:hover::before, .nav-link.active::before { width: 100%; }
         
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
+
         /* Main Content */
         .main-content {
             flex-grow: 1;
@@ -179,7 +186,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             background: var(--primary);
             color: #fff;
         }
-        .btn:hover { background: var(--primary-hover); transform: scale(1.02); box-shadow: 0 4px 15px rgba(15, 92, 74, 0.2); }
+        .btn:hover { background: var(--primary-hover); transform: scale(1.02); box-shadow: 0 4px 15px rgba(199, 154, 74, 0.2); }
         .btn-danger { background: var(--status-rejected); }
         .btn-danger:hover { background: #a83225; box-shadow: 0 4px 15px rgba(192, 57, 43, 0.2); }
         
@@ -198,7 +205,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--card-border); border-radius: 6px; font-size: 0.95rem;
             background: #fff; color: var(--text-heading); transition: all 0.2s;
         }
-        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15, 92, 74, 0.1); }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(199, 154, 74, 0.1); }
         
         select.form-control { appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231C1C1C%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 1rem top 50%; background-size: 0.65rem auto; padding-right: 2.5rem; }
         
@@ -237,9 +244,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <body>
 
 <div class="sidebar">
-    <div class="sidebar-header">
-        <i class="fa-solid fa-shield-halved"></i>
-        <h2>Apnaa Ghar Admin</h2>
+    <div class="sidebar-header" style="justify-content: flex-start; padding: 1.5rem;">
+        <div style="background: #fff; padding: 6px; border-radius: 8px; margin-right: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--primary);">
+            <img src="../logo.png" alt="Apnaa Ghar" style="max-height: 35px; object-fit: contain;">
+        </div>
+        <h2 style="font-size: 1.15rem; margin: 0; color: #fff; letter-spacing: 0.5px;">ApnaaGhar</h2>
     </div>
     <div class="nav-menu">
         <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
@@ -247,6 +256,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </a>
         <a href="manage_properties.php" class="nav-link <?php echo ($current_page == 'manage_properties.php' || $current_page == 'property_edit.php' || $current_page == 'property_add.php') ? 'active' : ''; ?>">
             <i class="fa-solid fa-city"></i> Properties
+        </a>
+        <a href="manage_enquiries.php" class="nav-link <?php echo ($current_page == 'manage_enquiries.php') ? 'active' : ''; ?>">
+            <i class="fa-solid fa-envelope-open-text"></i> Enquiries
         </a>
         <a href="gallery.php" class="nav-link <?php echo ($current_page == 'gallery.php') ? 'active' : ''; ?>">
             <i class="fa-solid fa-images"></i> Gallery
@@ -259,15 +271,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="topbar-title">
             <?php 
                 if($current_page == 'dashboard.php') echo 'Dashboard Overview';
-                elseif(strpos($current_page, 'propert') !== false) echo 'Property Management';
-                elseif(strpos($current_page, 'gallery') !== false) echo 'Gallery Management';
+                elseif($current_page == 'manage_properties.php' || $current_page == 'property_edit.php' || $current_page == 'property_add.php') echo 'Property Management';
+                elseif($current_page == 'manage_enquiries.php') echo 'Enquiries Management';
+                elseif($current_page == 'gallery.php') echo 'Gallery Management';
                 else echo 'Admin Panel';
             ?>
         </div>
         <div class="admin-profile">
             <span><i class="fa-solid fa-circle-user" style="color:var(--primary); font-size:1.2rem; vertical-align:middle; margin-right:4px;"></i> <?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
-            <a href="logout.php" class="btn-logout"><i class="fa-solid fa-power-off"></i> Logout</a>
+            <a href="logout.php" class="btn-logout" style="padding: 0.5rem 1rem; background: rgba(192,57,43,0.1); color: #C0392B; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.85rem; transition: all 0.2s;"><i class="fa-solid fa-power-off"></i> Logout</a>
         </div>
     </div>
     
     <div class="content-area">
+
+
+

@@ -2136,25 +2136,54 @@ a {
 
 /* Custom Visual Popup / Alert boxes */
 .alert-box {
-  padding: 1.25rem;
-  border-radius: 4px;
+  padding: 1.5rem;
+  border-radius: 8px;
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  align-items: center;
+  gap: 1.25rem;
   position: relative;
-  margin-top: 1rem;
-  animation: alertSlide 0.4s ease forwards;
+  margin-top: 1.5rem;
+  animation: alertSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 .alert-success {
-  background-color: rgba(76, 175, 80, 0.08);
-  border: 1px solid rgba(76, 175, 80, 0.2);
-  color: #2E7D32;
+  background: linear-gradient(135deg, var(--primary) 0%, #d4a956 100%);
+  border: none;
+  color: var(--secondary); /* Navy */
+}
+
+.alert-success .alert-icon {
+  font-size: 2rem;
+  color: var(--secondary);
+}
+
+.alert-success h4 {
+  color: var(--secondary);
+  font-family: var(--font-heading);
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.alert-success p {
+  color: var(--secondary);
+  opacity: 0.9;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.alert-success .alert-close-btn {
+  color: var(--secondary);
+  opacity: 0.6;
+}
+.alert-success .alert-close-btn:hover {
+  opacity: 1;
 }
 
 .alert-danger {
-  background-color: rgba(211, 47, 47, 0.08);
-  border: 1px solid rgba(211, 47, 47, 0.2);
+  background-color: #ffeaea;
+  border: 1px solid #ffcccc;
   color: #C62828;
 }
 

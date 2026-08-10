@@ -26,16 +26,25 @@ if (isset($_GET['delete'])) {
 $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->fetchAll();
 ?>
 
-<div class="card fade-up">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h3>Manage Properties</h3>
-        <a href="property_add.php" class="btn"><i class="fa-solid fa-plus"></i> Add New Property</a>
+<div class="card fade-up" style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+    <div style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <h3 style="margin: 0; color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px;">
+            <i class="fa-solid fa-building" style="color: var(--primary); margin-right: 10px;"></i> Manage Properties
+        </h3>
+          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+              <div style="position: relative;">
+                  <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+                  <input type="text" id="propertySearch" class="form-control" placeholder="Search properties by title, location, status..." style="padding: 0.6rem 1rem 0.6rem 36px; width: 350px; border-radius: 8px; border: none; outline: none; background: rgba(255,255,255,0.95); color: #333; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+              </div>
+              <a href="property_add.php" class="btn" style="background: var(--primary); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px;"><i class="fa-solid fa-plus"></i> Add New Property</a>
+          </div>
     </div>
     
-    <div style="overflow-x: auto;">
+    <div style="overflow-x: auto; padding: 2rem;">
         <table>
             <thead>
                 <tr>
+                    <th width="40">#</th>
                     <th width="80">Image</th>
                     <th>Property Details</th>
                     <th>Status</th>
@@ -43,9 +52,10 @@ $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->
                     <th width="150">Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach($properties as $prop): ?>
-                <tr>
+            <tbody id="propertyTableBody">
+                <?php $serial = 1; foreach($properties as $prop): ?>
+                <tr class="property-row">
+                    <td style="color: var(--text-body); font-weight: 500;"><?php echo $serial++; ?></td>
                     <td>
                         <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : '../'.$prop['image_url']; ?>" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                     </td>
@@ -75,15 +85,15 @@ $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->
                         <?php echo htmlspecialchars($prop['price']); ?>
                     </td>
                     <td>
-                        <a href="property_edit.php?id=<?php echo $prop['id']; ?>" class="btn btn-sm" style="background: rgba(15,92,74,0.1); color: var(--primary); padding: 0.5rem 0.75rem;"><i class="fa-solid fa-pen"></i></a>
-                        <button onclick="confirmDelete('manage_properties.php?delete=<?php echo $prop['id']; ?>')" class="btn btn-sm btn-danger" style="padding: 0.5rem 0.75rem;"><i class="fa-solid fa-trash"></i></button>
+                        <a href="property_edit.php?id=<?php echo $prop['id']; ?>" class="btn btn-sm" title="Edit" style="background: rgba(199, 154, 74, 0.1); color: var(--primary); padding: 0.5rem 0.75rem;"><i class="fa-solid fa-pen"></i></a>
+                        <button onclick="confirmDelete('manage_properties.php?delete=<?php echo $prop['id']; ?>')" class="btn btn-sm btn-danger" title="Delete" style="padding: 0.5rem 0.75rem;"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
                 <?php endforeach; ?>
                 
                 <?php if(empty($properties)): ?>
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-body);">No properties found. Add one to get started!</td>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-body);">No properties found. Add one to get started!</td>
                 </tr>
                 <?php endif; ?>
             </tbody>
@@ -91,4 +101,25 @@ $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('propertySearch');
+    const tableRows = document.querySelectorAll('.property-row');
+
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        tableRows.forEach(row => {
+            const textContent = row.textContent.toLowerCase();
+            if(textContent.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+
 <?php require_once 'includes/footer.php'; ?>
+

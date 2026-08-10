@@ -82,10 +82,7 @@ $villaCount = $stmtVilla->fetchColumn();
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/style_v2.css">
 
-  <script>
-    // Inject dynamic properties data for GSAP modals
-    
-  </script>
+
 
   <!-- SEO Structured Data Schema (JSON-LD) -->
   <script type="application/ld+json">
@@ -661,17 +658,8 @@ $villaCount = $stmtVilla->fetchColumn();
           <p class="section-desc">Explore inside views of our elite real estate office, premium properties, happy client interactions, and property site visits.</p>
         </div>
 
-        <!-- Category Filters -->
-        <div class="gallery-filters reveal-el">
-          <button class="filter-btn active" data-filter="all">All Photos</button>
-          <button class="filter-btn" data-filter="office">Our Office</button>
-          <button class="filter-btn" data-filter="properties">Properties</button>
-          <button class="filter-btn" data-filter="clients">Clients</button>
-          <button class="filter-btn" data-filter="visits">Site Visits</button>
-        </div>
-
         <!-- Masonry Grid -->
-        <div class="gallery-masonry reveal-el" id="gallery-masonry">
+        <div class="gallery-masonry reveal-el" id="gallery-masonry" style="margin-top: 2rem;">
           <?php foreach($gallery_items as $item): ?>
           <div class="gallery-item" data-category="<?php echo strtolower($item['category'] == 'Site Visits' ? 'visits' : $item['category']); ?>">
             <div class="gallery-img-box">
@@ -750,13 +738,24 @@ $villaCount = $stmtVilla->fetchColumn();
 
           <!-- Right: Contact Form -->
           <div class="contact-form-card reveal-el">
-            <form id="realEstateForm" class="luxury-form" action="https://api.web3forms.com/submit" method="POST">
-              <!-- Web3Forms API Access Key -->
-              <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-              <!-- Anti-Spam Honeypot -->
-              <input type="checkbox" name="botcheck" class="hidden-honeypot" style="display: none;">
-              <!-- Custom Redirect/Subject -->
-              <input type="hidden" name="subject" value="New Property Consultation Inquiry - Apnaa Ghar">
+            <form id="realEstateForm" class="luxury-form" action="api/submit_enquiry.php" method="POST">
+              <div id="form-alert-success" class="alert-box alert-success hidden" style="margin-top: 0; margin-bottom: 2rem;">
+                <div class="alert-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="alert-text">
+                  <h4>Inquiry Submitted Successfully</h4>
+                  <p>Our property consultant will contact you within the next 2 hours.</p>
+                </div>
+                <button type="button" class="alert-close-btn">&times;</button>
+              </div>
+
+              <div id="form-alert-error" class="alert-box alert-danger hidden" style="margin-top: 0; margin-bottom: 2rem;">
+                <div class="alert-icon"><i class="fa-solid fa-circle-xmark"></i></div>
+                <div class="alert-text">
+                  <h4>Submission Failed</h4>
+                  <p>Please double-check your connection or inputs and try again.</p>
+                </div>
+                <button type="button" class="alert-close-btn">&times;</button>
+              </div>
 
               <div class="form-row">
                 <div class="form-group">
@@ -813,24 +812,6 @@ $villaCount = $stmtVilla->fetchColumn();
               <button type="submit" id="form-submit-btn" class="btn btn-gold btn-full magnetic">
                 Send Inquiry <i class="fa-solid fa-paper-plane"></i>
               </button>
-
-              <div id="form-alert-success" class="alert-box alert-success hidden">
-                <div class="alert-icon"><i class="fa-solid fa-circle-check"></i></div>
-                <div class="alert-text">
-                  <h4>Inquiry Submitted Successfully</h4>
-                  <p>Our property consultant will contact you within the next 2 hours.</p>
-                </div>
-                <button type="button" class="alert-close-btn">&times;</button>
-              </div>
-
-              <div id="form-alert-error" class="alert-box alert-danger hidden">
-                <div class="alert-icon"><i class="fa-solid fa-circle-xmark"></i></div>
-                <div class="alert-text">
-                  <h4>Submission Failed</h4>
-                  <p>Please double-check your connection or inputs and try again.</p>
-                </div>
-                <button type="button" class="alert-close-btn">&times;</button>
-              </div>
             </form>
           </div>
         </div>
@@ -1053,7 +1034,12 @@ $villaCount = $stmtVilla->fetchColumn();
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   
+  <script>
+    // Inject dynamic properties data for GSAP modals
+    window.dynamicPropertiesData = <?php echo json_encode($propertiesJsonObj, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE); ?>;
+  </script>
+
   <!-- Main Script -->
-  <script src="js/main_v2.js"></script>
+  <script src="js/main_v2.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

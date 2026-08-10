@@ -757,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------------
      14. DETAILED PROPERTY OVERVIEW MODAL SYSTEM
      ------------------------------------------------------------------------ */
-  const propertiesData = {
+  const propertiesData = window.dynamicPropertiesData || {
     "property-1": {
       title: "The Grand Horizon Residency",
       type: "Luxury Tower",

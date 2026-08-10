@@ -62,11 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="card fade-up">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h3>Add New Property</h3>
-        <a href="manage_properties.php" class="btn" style="background: #f1f5f9; border: 1px solid var(--border);">Back to Properties</a>
+<div class="card fade-up" style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+    <div style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <h3 style="margin: 0; color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px;">
+            <i class="fa-solid fa-plus-circle" style="color: var(--primary); margin-right: 10px;"></i> Add New Property
+        </h3>
+        <a href="manage_properties.php" class="btn" style="background: rgba(255,255,255,0.1); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px;"><i class="fa-solid fa-arrow-left"></i> Back to Properties</a>
     </div>
+    
+    <div style="padding: 2rem;">
     
     <?php if(!empty($error)): ?>
         <div style="background: #fee2e2; color: #b91c1c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #fecaca;"><?php echo $error; ?></div>
@@ -156,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <button type="submit" class="btn btn" style="margin-top: 1rem;"><i class="fa-solid fa-save"></i> Save Property</button>
     </form>
+    </div> <!-- End padding wrapper -->
 </div>
 
 <?php require_once 'includes/footer.php'; ?>

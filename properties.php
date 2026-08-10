@@ -2,7 +2,35 @@
 require_once 'includes/db.php';
 
 // Fetch All Properties for the properties page
-$stmt = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC");
+$locParam = isset($_GET['location']) ? strtolower(trim($_GET['location'])) : 'all';
+$bhkParam = isset($_GET['bhk']) ? strtolower(trim($_GET['bhk'])) : 'all';
+
+$sql = "SELECT * FROM properties WHERE 1=1";
+$params = [];
+
+// Filter by location if specified (and not 'all')
+if ($locParam !== 'all' && !empty($locParam)) {
+    // Map the dropdown values to actual database search patterns
+    $locSearch = str_replace('-', ' ', $locParam); 
+    $sql .= " AND LOWER(location) LIKE ?";
+    $params[] = "%{$locSearch}%";
+}
+
+// Filter by BHK/Type if specified (and not 'all')
+if ($bhkParam !== 'all' && !empty($bhkParam)) {
+    if ($bhkParam === '4+') {
+        $sql .= " AND (bhk LIKE '%4%' OR bhk LIKE '%5%' OR bhk LIKE '%6%' OR LOWER(type) LIKE '%villa%')";
+    } elseif ($bhkParam === 'commercial') {
+        $sql .= " AND (LOWER(type) LIKE '%commercial%' OR LOWER(type) LIKE '%office%' OR LOWER(type) LIKE '%shop%')";
+    } else {
+        $sql .= " AND bhk LIKE ?";
+        $params[] = "%{$bhkParam}%";
+    }
+}
+
+$sql .= " ORDER BY created_at DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 $properties = $stmt->fetchAll();
 
 // Build JSON object for the GSAP frontend modals
@@ -529,38 +557,43 @@ foreach ($properties as $prop) {
       </div>
     </div>
   </div>
-
+      
   <!-- CDN scripts for high-end animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   
+  <script>
+    // Inject dynamic properties data from PHP for the modals
+    window.dynamicPropertiesData = <?php echo json_encode($propertiesJsonObj); ?>;
+  </script>
+
   <!-- Main Script -->
-  <script src="js/main_v2.js"></script>
+  <script src="js/main_v2.js?v=<?php echo time(); ?>"></script>
   <script>
     // Handle URL parameters for filtering on properties page
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const bhkParam = urlParams.get('bhk');
+      const locParam = urlParams.get('location');
       
-      if (bhkParam) {
-        const bhkOptions = document.querySelectorAll('#bhk-select-wrapper .custom-option');
-        let optionFound = false;
-        bhkOptions.forEach(opt => {
-          if (opt.getAttribute('data-value') === bhkParam) {
-            opt.click(); // Trigger the custom select logic
-            optionFound = true;
+      // Restore Location Dropdown state
+      if (locParam) {
+        const locOptions = document.querySelectorAll('#loc-select-wrapper .custom-option');
+        locOptions.forEach(opt => {
+          if (opt.getAttribute('data-value') === locParam) {
+            opt.click();
           }
         });
-        
-        if (optionFound) {
-          // Add a small delay to ensure custom select logic has updated the hidden input
-          setTimeout(() => {
-            const filterForm = document.getElementById('property-filter-form');
-            if (filterForm) {
-              filterForm.dispatchEvent(new Event('submit'));
-            }
-          }, 100);
-        }
+      }
+
+      // Restore BHK Dropdown state
+      if (bhkParam) {
+        const bhkOptions = document.querySelectorAll('#bhk-select-wrapper .custom-option');
+        bhkOptions.forEach(opt => {
+          if (opt.getAttribute('data-value') === bhkParam) {
+            opt.click();
+          }
+        });
       }
     });
   </script>

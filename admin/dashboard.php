@@ -22,7 +22,52 @@ $total_leads = 1284;
 $total_revenue = 450; // in Cr
 $active_listings = 18;
 
+// Get unread enquiries count
+$unread_enquiries = 0;
+try {
+    $unread_enquiries = $pdo->query("SELECT COUNT(*) FROM enquiries WHERE status = 'unread'")->fetchColumn();
+} catch (Exception $e) {}
+
 ?>
+
+<style>
+    .notification-banner { 
+        background: linear-gradient(135deg, var(--primary) 0%, #d4a956 100%); 
+        color: var(--sidebar-bg); 
+        padding: 1.25rem 2rem; 
+        border-radius: 12px; 
+        margin-bottom: 2rem; 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        font-weight: 600; 
+        box-shadow: 0 10px 25px rgba(199, 154, 74, 0.2); 
+        animation: fadeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
+    .notification-banner i { font-size: 1.5rem; margin-right: 1rem; color: var(--sidebar-bg); }
+    .notification-banner a { 
+        background-color: var(--sidebar-bg); 
+        color: white; 
+        padding: 0.6rem 1.25rem; 
+        border-radius: 6px; 
+        text-decoration: none; 
+        font-size: 0.95rem; 
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 10px rgba(17, 34, 59, 0.3);
+    }
+    .notification-banner a:hover { 
+        background-color: #1a3253; 
+        transform: translateY(-2px);
+    }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<?php if($unread_enquiries > 0): ?>
+    <div class="notification-banner">
+        <div><i class="fa-solid fa-bell fa-shake"></i> You have <?php echo $unread_enquiries; ?> new unread user <?php echo $unread_enquiries == 1 ? 'enquiry' : 'enquiries'; ?>!</div>
+        <a href="manage_enquiries.php">View Enquiries</a>
+    </div>
+<?php endif; ?>
 
 <style>
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
@@ -36,7 +81,7 @@ $active_listings = 18;
     .kpi-value { font-size: 2rem; font-weight: 700; color: var(--text-heading); }
     .kpi-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
     
-    .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
     .chart-card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--card-border); padding: 1.5rem; box-shadow: var(--card-shadow); opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s forwards; animation-delay: 0.5s; }
     .chart-card h3 { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-heading); }
     .chart-container { position: relative; height: 300px; width: 100%; }
@@ -61,15 +106,15 @@ $active_listings = 18;
             <i class="fa-solid fa-users"></i>
         </div>
     </div>
-    <div class="kpi-card">
-        <div class="kpi-info">
-            <h4>Est. Revenue (Cr)</h4>
-            <div class="kpi-value">?<span id="kpi-rev">0</span></div>
-        </div>
-        <div class="kpi-icon" style="background: rgba(46, 125, 50, 0.1); color: var(--status-active);">
-            <i class="fa-solid fa-indian-rupee-sign"></i>
-        </div>
-    </div>
+      <div class="kpi-card">
+          <div class="kpi-info">
+              <h4>Est. Revenue (Cr)</h4>
+              <div class="kpi-value"><span style="font-size: 0.8em; margin-right: 2px;">Rs.</span> <span id="kpi-rev">0</span></div>
+          </div>
+          <div class="kpi-icon" style="background: rgba(39, 174, 96, 0.1); color: var(--status-success);">
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+          </div>
+      </div>
     <div class="kpi-card">
         <div class="kpi-info">
             <h4>Gallery Assets</h4>
@@ -81,27 +126,20 @@ $active_listings = 18;
     </div>
 </div>
 
-<div class="charts-grid">
-    <div class="chart-card">
-        <h3>Revenue & Sales Trend</h3>
-        <div class="chart-container">
-            <canvas id="revenueChart"></canvas>
-        </div>
-    </div>
-    <div class="chart-card">
-        <h3>Properties by Status</h3>
-        <div class="chart-container">
-            <canvas id="statusChart"></canvas>
-        </div>
-    </div>
-</div>
-
-<div class="chart-card" style="animation-delay: 0.6s;">
-    <h3>Enquiries Over Time</h3>
-    <div class="chart-container" style="height: 250px;">
-        <canvas id="leadsChart"></canvas>
-    </div>
-</div>
+  <div class="charts-grid">
+      <div class="chart-card">
+          <h3>Revenue & Sales Trend</h3>
+          <div class="chart-container">
+              <canvas id="revenueChart"></canvas>
+          </div>
+      </div>
+      <div class="chart-card" style="animation-delay: 0.6s;">
+          <h3>Enquiries Over Time</h3>
+          <div class="chart-container" style="height: 300px;">
+              <canvas id="leadsChart"></canvas>
+          </div>
+      </div>
+  </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -120,8 +158,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctxRev = document.getElementById('revenueChart').getContext('2d');
     
     let gradient = ctxRev.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(15, 92, 74, 0.5)');
-    gradient.addColorStop(1, 'rgba(15, 92, 74, 0.0)');
+    gradient.addColorStop(0, 'rgba(199, 154, 74, 0.5)');
+    gradient.addColorStop(1, 'rgba(199, 154, 74, 0.0)');
 
     new Chart(ctxRev, {
         type: 'line',
@@ -130,11 +168,11 @@ document.addEventListener("DOMContentLoaded", function() {
             datasets: [{
                 label: 'Revenue (in Cr)',
                 data: [15, 20, 25, 22, 45, 55, 60, 58, 65, 80, 75, 90],
-                borderColor: '#0F5C4A',
+                borderColor: '#C79A4A',
                 backgroundColor: gradient,
                 borderWidth: 2,
                 pointBackgroundColor: '#fff',
-                pointBorderColor: '#0F5C4A',
+                pointborderColor: '#C79A4A',
                 pointRadius: 4,
                 pointHoverRadius: 6,
                 fill: true,
@@ -153,29 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Status Donut Chart (Real Data)
-    const ctxStatus = document.getElementById('statusChart').getContext('2d');
-    new Chart(ctxStatus, {
-        type: 'doughnut',
-        data: {
-            labels: <?php echo json_encode($status_labels); ?>,
-            datasets: [{
-                data: <?php echo json_encode($status_counts); ?>,
-                backgroundColor: ['#0F5C4A', '#E0A63E', '#2E7D32', '#3B6FA0', '#C0392B', '#8E44AD'],
-                borderWidth: 0,
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '75%',
-            plugins: {
-                legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
-            },
-            animation: { duration: 2000, easing: 'easeOutBounce' }
-        }
-    });
+
 
     // Leads Bar Chart
     const ctxLeads = document.getElementById('leadsChart').getContext('2d');
@@ -186,7 +202,9 @@ document.addEventListener("DOMContentLoaded", function() {
             datasets: [{
                 label: 'New Enquiries',
                 data: [45, 60, 55, 80, 95, 85, 110, 120],
-                backgroundColor: '#0F5C4A',
+                backgroundColor: 'rgba(199, 154, 74, 0.65)',
+                borderColor: '#C79A4A',
+                borderWidth: 2,
                 borderRadius: 4
             }]
         },
@@ -205,3 +223,6 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <?php require_once 'includes/footer.php'; ?>
+
+
+

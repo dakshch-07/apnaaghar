@@ -165,7 +165,7 @@ $gallery_items = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC")->
                 <img src="<?php echo strpos($item['image_url'], 'http') === 0 ? $item['image_url'] : '../'.$item['image_url']; ?>" style="width: 100%; height: 160px; object-fit: cover; display: block;">
                 
                 <div style="position: absolute; top: 10px; right: 10px; display:flex; gap:5px;">
-                    <a href="gallery.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm" style="background: rgba(255,255,255,0.9); color: var(--primary); padding: 6px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"><i class="fa-solid fa-pen"></i></a>
+                    <a href="gallery.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm" style="background: var(--primary); color: white; padding: 6px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: none;"><i class="fa-solid fa-pen"></i></a>
                     <button onclick="confirmDelete('gallery.php?delete=<?php echo $item['id']; ?>')" class="btn btn-sm btn-danger" style="padding: 6px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"><i class="fa-solid fa-trash"></i></button>
                 </div>
                 
@@ -186,3 +186,4 @@ $gallery_items = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC")->
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
+
