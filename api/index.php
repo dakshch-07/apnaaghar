@@ -10,8 +10,25 @@ if ($path === '') {
     $path = 'index.php';
 }
 
-// Map path to local file in parent directory (since we are inside /api)
 $file = dirname(__DIR__) . '/' . $path;
+
+// 1. If it's a directory and doesn't end with a slash, redirect with trailing slash (avoids broken relative paths)
+if (is_dir($file) && substr($requestUri, -1) !== '/') {
+    header("Location: " . $requestUri . "/");
+    exit;
+}
+
+// 2. If it's a directory, check for default index files (like index.php, dashboard.php)
+if (is_dir($file)) {
+    $indexFiles = ['index.php', 'index.html', 'dashboard.php'];
+    foreach ($indexFiles as $index) {
+        $checkFile = rtrim($file, '/') . '/' . $index;
+        if (file_exists($checkFile)) {
+            $file = $checkFile;
+            break;
+        }
+    }
+}
 
 // Prevent directory traversal attacks
 $realPath = realpath($file);
