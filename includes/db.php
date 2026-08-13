@@ -1,10 +1,10 @@
 <?php
 // Database configuration
-$host = getenv('DB_HOST') ?: 'localhost'; 
-$dbname = getenv('DB_NAME') ?: 'apnaaghar_db'; 
-$username = getenv('DB_USER') ?: 'root'; 
-$password = getenv('DB_PASS') ?: ''; 
-$port = getenv('DB_PORT') ?: '3306';
+$host = trim(getenv('DB_HOST') ?: 'localhost'); 
+$dbname = trim(getenv('DB_NAME') ?: 'apnaaghar_db'); 
+$username = trim(getenv('DB_USER') ?: 'root'); 
+$password = trim(getenv('DB_PASS') ?: ''); 
+$port = trim(getenv('DB_PORT') ?: '3306');
 
 try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);

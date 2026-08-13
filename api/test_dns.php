@@ -1,10 +1,11 @@
 <?php
 header('Content-Type: text/plain');
 
-$host = getenv('DB_HOST');
-echo "1. Host value: [" . $host . "]\n";
-echo "2. Character count: " . strlen($host) . "\n";
-echo "3. Hex representation: " . bin2hex($host) . "\n";
+$rawHost = getenv('DB_HOST');
+$host = trim($rawHost);
+echo "1. Raw Host value hex: " . bin2hex($rawHost) . "\n";
+echo "2. Trimmed Host value: [" . $host . "]\n";
+echo "3. Trimmed Character count: " . strlen($host) . "\n";
 
 if (!$host) {
     echo "Error: DB_HOST environment variable is not set on Vercel!\n";
