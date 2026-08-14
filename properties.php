@@ -70,14 +70,14 @@ foreach ($properties as $prop) {
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://apnaagharrealestate.com/">
+  <meta property="og:url" content="https://apnaagharrealestate.in/">
   <meta property="og:title" content="Apnaa Ghar Real Estate | Luxury Homes in Mumbai">
   <meta property="og:description" content="Discover premium apartments, modern interiors, and investment properties in Chembur, Ghatkopar, and Tilak Nagar. 4.9 Google rating.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://apnaagharrealestate.com/">
+  <meta property="twitter:url" content="https://apnaagharrealestate.in/">
   <meta property="twitter:title" content="Apnaa Ghar Real Estate | Luxury Homes in Mumbai">
   <meta property="twitter:description" content="Discover premium apartments, modern interiors, and investment properties in Chembur, Ghatkopar, and Tilak Nagar. 4.9 Google rating.">
   <meta property="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
@@ -108,8 +108,8 @@ foreach ($properties as $prop) {
     "@type": "RealEstateAgent",
     "name": "Apnaa Ghar Real Estate",
     "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-    "@id": "https://apnaagharrealestate.com/#agent",
-    "url": "https://apnaagharrealestate.com/",
+    "@id": "https://apnaagharrealestate.in/#agent",
+    "url": "https://apnaagharrealestate.in/",
     "telephone": "+917021316956",
     "priceRange": "$$$",
     "address": {
