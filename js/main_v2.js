@@ -1228,5 +1228,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 350);
     });
   }
+  // Bind "Why Choose Us" cards to WhatsApp enquiry action
+  const whyCards = document.querySelectorAll('.why-glass-card');
+  whyCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const title = card.querySelector('h3').textContent;
+      const whatsappText = encodeURIComponent(`Hi Apnaa Ghar Team, I am interested in your service/feature: "${title}". Please share more details.`);
+      const whatsappUrl = `https://wa.me/917021316956?text=${whatsappText}`;
+      window.open(whatsappUrl, '_blank');
+    });
+  });
 });
 
