@@ -162,7 +162,7 @@ foreach ($properties as $prop) {
   <div id="preloader" class="preloader">
     <div class="preloader-content">
       <div class="preloader-logo" style="margin-bottom: 1.5rem;">
-        <img src="logo.png" alt="Apnaa Ghar" style="height: 100px; object-fit: contain; mix-blend-mode: multiply;">
+        <img src="logo.png" alt="Apnaa Ghar" style="height: 120px; padding: 15px; background: #ffffff; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin-bottom: 10px;">
         <span class="logo-text-cormorant" style="margin-top: 15px; display: block;">Apnaa Ghar</span>
         <span class="logo-subtext">REAL ESTATE</span>
       </div>

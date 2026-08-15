@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 600);
 
-  // Animate preloader loading progress
+  // Animate preloader loading progress (Slowed down to take ~2 seconds)
   const progressInterval = setInterval(() => {
-    progress += Math.floor(Math.random() * 15) + 5;
+    progress += Math.floor(Math.random() * 2) + 1;
     if (progress >= 100) {
       progress = 100;
       clearInterval(progressInterval);
@@ -50,10 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         runEntranceAnimations();
 
         if (typeof gsap !== 'undefined') {
-          // Fade out animation
+          // Slowed down fade out animation (0.8s)
           gsap.to(preloader, {
             opacity: 0,
-            duration: 0.4,
+            duration: 0.8,
             ease: "power2.out",
             onComplete: () => {
               if (preloader) preloader.style.display = 'none';
@@ -62,14 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
         } else {
-          // Fallback if GSAP fails to load
+          // Fallback if GSAP fails to load (0.8s)
           if (preloader) {
-            preloader.style.transition = 'opacity 0.4s ease';
+            preloader.style.transition = 'opacity 0.8s ease';
             preloader.style.opacity = 0;
             setTimeout(() => {
               preloader.style.display = 'none';
               checkPendingInquiry();
-            }, 400);
+            }, 800);
           }
           document.body.style.overflow = 'auto';
         }
