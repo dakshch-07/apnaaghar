@@ -83,7 +83,7 @@ foreach ($properties as $prop) {
   <meta property="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23C79A4A'/%3E%3Cpath d='M35 65V45l15-12 15 12v20H55V53H45v12z' fill='%23111111'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
