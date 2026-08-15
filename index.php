@@ -138,8 +138,9 @@ $villaCount = $stmtVilla->fetchColumn();
   <!-- 1. PRELOADER -->
   <div id="preloader" class="preloader">
     <div class="preloader-content">
-      <div class="preloader-logo">
-        <span class="logo-text-cormorant">Apnaa Ghar</span>
+      <div class="preloader-logo" style="margin-bottom: 1.5rem;">
+        <img src="logo.png" alt="Apnaa Ghar" style="height: 100px; object-fit: contain; mix-blend-mode: multiply;">
+        <span class="logo-text-cormorant" style="margin-top: 15px; display: block;">Apnaa Ghar</span>
         <span class="logo-subtext">REAL ESTATE</span>
       </div>
       <div class="preloader-bar-container">
@@ -156,12 +157,8 @@ $villaCount = $stmtVilla->fetchColumn();
   <!-- 2. STICKY NAVBAR -->
   <header id="header" class="header">
     <div class="container navbar-container">
-      <a href="#home" class="logo magnetic">
-        <div class="logo-icon-box">AG</div>
-        <div class="logo-texts">
-          <span class="logo-main">Apnaa Ghar</span>
-          <span class="logo-tagline">Real Estate</span>
-        </div>
+      <a href="#home" class="logo magnetic" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+        <img src="logo.png" alt="Apnaa Ghar Real Estate" style="height: 55px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
       </a>
       
       <nav id="nav-menu" class="nav-menu">
@@ -190,8 +187,8 @@ $villaCount = $stmtVilla->fetchColumn();
 
   <!-- MOBILE NAVIGATION DRAWER -->
   <div class="mobile-drawer" id="mobile-drawer">
-    <div class="mobile-drawer-header">
-      <span class="logo-main">Apnaa Ghar</span>
+    <div class="mobile-drawer-header" style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem;">
+      <img src="logo.png" alt="Apnaa Ghar" style="height: 40px; object-fit: contain; mix-blend-mode: multiply;">
       <button class="drawer-close" id="drawer-close">&times;</button>
     </div>
     <nav class="mobile-drawer-nav">
@@ -824,9 +821,8 @@ $villaCount = $stmtVilla->fetchColumn();
     <div class="container footer-top-grid">
       <!-- Footer Logo & Intro -->
       <div class="footer-col-desc">
-        <a href="#home" class="footer-logo">
-          <span class="logo-main">Apnaa Ghar</span>
-          <span class="logo-subtext">Real Estate</span>
+        <a href="#home" class="footer-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+          <img src="logo.png" alt="Apnaa Ghar" style="height: 50px; object-fit: contain; mix-blend-mode: multiply;">
         </a>
         <p class="footer-about-text">
           Mumbai's premium real estate consultancy serving Chembur, Tilak Nagar, Ghatkopar, Kurla and surrounding micro-markets since 2015. 4.9 rated.
