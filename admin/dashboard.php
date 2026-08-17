@@ -18,9 +18,9 @@ foreach($statuses as $s) {
 }
 
 // Mock KPI Data for demo
-$total_leads = 1284;
-$total_revenue = 450; // in Cr
-$active_listings = 18;
+$total_leads = 0;
+$total_revenue = 0; // in Cr
+$active_listings = 0;
 
 // Get unread enquiries count
 $unread_enquiries = 0;
