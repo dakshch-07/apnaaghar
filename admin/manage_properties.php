@@ -27,20 +27,20 @@ $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->
 ?>
 
 <div class="card fade-up" style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
-    <div style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div class="card-header-flex" style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <h3 style="margin: 0; color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px;">
             <i class="fa-solid fa-building" style="color: var(--primary); margin-right: 10px;"></i> Manage Properties
         </h3>
-          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-              <div style="position: relative;">
+          <div class="search-container" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+              <div style="position: relative; width: 100%;">
                   <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666;"></i>
                   <input type="text" id="propertySearch" class="form-control" placeholder="Search properties by title, location, status..." style="padding: 0.6rem 1rem 0.6rem 36px; width: 350px; border-radius: 8px; border: none; outline: none; background: rgba(255,255,255,0.95); color: #333; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
               </div>
-              <a href="property_add.php" class="btn" style="background: var(--primary); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px;"><i class="fa-solid fa-plus"></i> Add New Property</a>
+              <a href="property_add.php" class="btn" style="background: var(--primary); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap;"><i class="fa-solid fa-plus"></i> Add New Property</a>
           </div>
     </div>
     
-    <div style="overflow-x: auto; padding: 2rem;">
+    <div class="table-wrapper" style="overflow-x: auto; padding: 2rem;">
         <table>
             <thead>
                 <tr>

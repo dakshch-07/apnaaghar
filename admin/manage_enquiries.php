@@ -32,7 +32,7 @@ $enquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 0.95rem;">View and manage all contact requests from the website.</p>
         </div>
         
-        <div style="overflow-x: auto; padding: 2rem;">
+        <div class="table-wrapper" style="overflow-x: auto; padding: 2rem;">
             <table>
                 <thead>
                     <tr>

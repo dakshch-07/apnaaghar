@@ -173,24 +173,28 @@ $current_page = basename($_SERVER['PHP_SELF']);
             
             /* Topbar adjustments for mobile */
             .topbar {
-                padding: 1rem 1.25rem;
-                gap: 0.75rem;
+                padding: 1rem;
+                gap: 0.5rem;
+                flex-wrap: wrap;
             }
-            .topbar-title { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55vw; }
+            .topbar-title { font-size: 1.1rem; white-space: normal; text-overflow: clip; max-width: 100%; flex: 1; min-width: 150px; }
             .admin-profile span { display: none; }
+            .admin-profile { margin-left: auto; }
             
             /* Show hamburger on mobile */
             .hamburger-btn { display: flex; align-items: center; justify-content: center; }
             
             /* Content area padding reduced on mobile */
-            .content-area { padding: 1.25rem; }
+            .content-area { padding: 1rem; }
             
-            /* Cards on mobile: remove hover lift */
+            /* Cards on mobile: remove hover lift and reduce padding */
+            .card { padding: 1.25rem; }
             .card:hover { transform: none; }
             
             /* Tables: horizontal scroll on mobile */
-            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; }
-            table { min-width: 540px; }
+            .table-responsive, .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; padding: 1rem !important; }
+            table { min-width: 600px; }
+            th, td { padding: 0.8rem 0.5rem; font-size: 0.85rem; }
             
             /* Forms: single column on mobile */
             div[style*='grid-template-columns: 1fr 1fr'] {
@@ -200,12 +204,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
             
             /* Stat cards grid on mobile */
             .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+
+            /* Utility classes for responsive design */
+            .responsive-grid { grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important; gap: 1.5rem !important; }
+            .card-header-flex { flex-direction: column !important; align-items: stretch !important; padding: 1.25rem !important; }
+            .card-header-flex h3 { font-size: 1.4rem !important; text-align: center; }
+            .search-container { flex-direction: column; width: 100%; }
+            .search-container input { width: 100% !important; }
+            .search-container .btn { width: 100%; justify-content: center; }
         }
         
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr !important; }
-            .topbar-title { font-size: 0.9rem; }
+            .topbar-title { font-size: 1rem; }
             .btn { padding: 0.65rem 1rem; font-size: 0.85rem; }
+            .table-wrapper { padding: 0.5rem !important; }
         }
         
         .topbar {

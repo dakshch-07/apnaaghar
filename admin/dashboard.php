@@ -85,6 +85,17 @@ try {
     .chart-card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--card-border); padding: 1.5rem; box-shadow: var(--card-shadow); opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s forwards; animation-delay: 0.5s; }
     .chart-card h3 { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-heading); }
     .chart-container { position: relative; height: 300px; width: 100%; }
+
+    @media (max-width: 1024px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+        .charts-grid { grid-template-columns: 1fr; }
+        .chart-container { height: 250px; }
+    }
+    @media (max-width: 480px) {
+        .kpi-grid { grid-template-columns: 1fr; }
+    }
 </style>
 
 <div class="kpi-grid">

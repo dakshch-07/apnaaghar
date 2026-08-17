@@ -94,7 +94,7 @@ if (isset($_GET['edit'])) {
 $gallery_items = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC")->fetchAll();
 ?>
 
-<div style="display: grid; grid-template-columns: 350px 1fr; gap: 2rem;" class="fade-up">
+<div class="responsive-grid fade-up" style="display: grid; grid-template-columns: 350px 1fr; gap: 2rem;">
     
     <!-- Add/Edit Form -->
     <div class="card" style="height: fit-content; position: sticky; top: 100px;">
