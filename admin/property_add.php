@@ -23,25 +23,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $highlights_json = json_encode(array_values($highlights));
     $connectivity_json = json_encode(array_values($connectivity));
     
-    // Image Upload Logic
+    // Image Upload Logic — Base64 encode and store in DB (Vercel has read-only filesystem)
     $image_url = '';
     
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+        $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
         $filename = $_FILES['image']['name'];
-        $filetype = pathinfo($filename, PATHINFO_EXTENSION);
+        $filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $max_size = 5 * 1024 * 1024; // 5MB limit
         
-        if (in_array(strtolower($filetype), $allowed)) {
-            $new_filename = uniqid() . '.' . $filetype;
-            $upload_path = '../uploads/properties/' . $new_filename;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
-                $image_url = 'uploads/properties/' . $new_filename;
-            } else {
-                $error = "Failed to upload image.";
-            }
+        if (!in_array($filetype, $allowed)) {
+            $error = "Invalid file type. Only JPG, PNG, WEBP, GIF allowed.";
+        } elseif ($_FILES['image']['size'] > $max_size) {
+            $error = "Image too large. Maximum size is 5MB.";
         } else {
-            $error = "Invalid file type. Only JPG, PNG, WEBP allowed.";
+            $mime_types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
+            $mime = $mime_types[$filetype] ?? 'image/jpeg';
+            $image_data = file_get_contents($_FILES['image']['tmp_name']);
+            if ($image_data !== false) {
+                $image_url = 'data:' . $mime . ';base64,' . base64_encode($image_data);
+            } else {
+                $error = "Failed to read uploaded image.";
+            }
         }
     } else {
         // Fallback if they put a URL instead

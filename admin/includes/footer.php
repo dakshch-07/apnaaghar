@@ -48,18 +48,71 @@
 
                 const label = document.createElement('label');
                 label.className = 'custom-file-label';
-                label.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Click to upload or drag & drop</span>';
+                label.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Click to upload or drag &amp; drop</span>';
                 wrapper.appendChild(label);
             }
 
             input.addEventListener('change', function(e) {
-                const fileName = e.target.files[0] ? e.target.files[0].name : 'Click to upload or drag & drop';
-                const labelSpan = this.nextElementSibling.querySelector('span');
-                if (labelSpan) {
-                    labelSpan.textContent = fileName;
+                const file = e.target.files[0];
+                if (!file) return;
+                const labelSpan = this.closest('.custom-file-upload')?.querySelector('span');
+                if (labelSpan) labelSpan.textContent = file.name;
+                
+                // Show inline image preview
+                const wrapper = this.closest('.custom-file-upload');
+                if (wrapper) {
+                    let preview = wrapper.querySelector('.file-preview-image');
+                    if (!preview) {
+                        const previewContainer = document.createElement('div');
+                        previewContainer.className = 'file-preview-container';
+                        preview = document.createElement('img');
+                        preview.className = 'file-preview-image';
+                        previewContainer.appendChild(preview);
+                        wrapper.appendChild(previewContainer);
+                    }
+                    const reader = new FileReader();
+                    reader.onload = e => { preview.src = e.target.result; }
+                    reader.readAsDataURL(file);
                 }
             });
         });
+    });
+
+    // Mobile Sidebar Controls
+    function openSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const closeBtn = document.getElementById('sidebarClose');
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        if (closeBtn) closeBtn.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const closeBtn = document.getElementById('sidebarClose');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        if (closeBtn) closeBtn.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    
+    // Close sidebar when a nav link is clicked on mobile
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) closeSidebar();
+        });
+    });
+
+    // On desktop resize, reset sidebar state
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
     });
 </script>
 </body>

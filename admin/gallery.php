@@ -37,21 +37,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
         $image_url = $_POST['existing_image'] ?? '';
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-            $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+            $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
             $filename = $_FILES['image']['name'];
-            $filetype = pathinfo($filename, PATHINFO_EXTENSION);
+            $filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            $max_size = 5 * 1024 * 1024; // 5MB limit
             
-            if (in_array(strtolower($filetype), $allowed)) {
-                $new_filename = uniqid() . '.' . $filetype;
-                $upload_path = '../uploads/gallery/' . $new_filename;
-                
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
-                    $image_url = 'uploads/gallery/' . $new_filename;
-                } else {
-                    $error = "Failed to upload image.";
-                }
+            if (!in_array($filetype, $allowed)) {
+                $error = "Invalid file type. Only JPG, PNG, WEBP, GIF allowed.";
+            } elseif ($_FILES['image']['size'] > $max_size) {
+                $error = "Image too large. Maximum size is 5MB.";
             } else {
-                $error = "Invalid file type. Only JPG, PNG, WEBP allowed.";
+                $mime_types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
+                $mime = $mime_types[$filetype] ?? 'image/jpeg';
+                $image_data = file_get_contents($_FILES['image']['tmp_name']);
+                if ($image_data !== false) {
+                    $image_url = 'data:' . $mime . ';base64,' . base64_encode($image_data);
+                } else {
+                    $error = "Failed to read uploaded image.";
+                }
             }
         } elseif(empty($image_url)) {
             $image_url = $_POST['image_url_fallback'] ?? '';
@@ -136,7 +139,7 @@ $gallery_items = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC")->
                 <input type="file" name="image" accept="image/*">
                 <?php if($edit_item && $edit_item['image_url']): ?>
                     <div style="margin-top: 10px;">
-                        <img src="<?php echo strpos($edit_item['image_url'], 'http') === 0 ? $edit_item['image_url'] : '../'.$edit_item['image_url']; ?>" style="width:100%; border-radius:8px; border:1px solid var(--card-border);">
+                        <img src="<?php echo strpos($edit_item['image_url'], 'uploads/') === 0 ? '../'.$edit_item['image_url'] : $edit_item['image_url']; ?>" style="width:100%; border-radius:8px; border:1px solid var(--card-border);">
                     </div>
                 <?php endif; ?>
             </div>
@@ -162,7 +165,7 @@ $gallery_items = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC")->
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
             <?php foreach($gallery_items as $item): ?>
             <div style="border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; position: relative; transition: all 0.2s; background: #fff;" onmouseover="this.style.boxShadow='0 10px 20px rgba(0,0,0,0.05)'" onmouseout="this.style.boxShadow='none'">
-                <img src="<?php echo strpos($item['image_url'], 'http') === 0 ? $item['image_url'] : '../'.$item['image_url']; ?>" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+                <img src="<?php echo strpos($item['image_url'], 'uploads/') === 0 ? '../'.$item['image_url'] : $item['image_url']; ?>" style="width: 100%; height: 160px; object-fit: cover; display: block;">
                 
                 <div style="position: absolute; top: 10px; right: 10px; display:flex; gap:5px;">
                     <a href="gallery.php?edit=<?php echo $item['id']; ?>" class="btn btn-sm" style="background: var(--primary); color: white; padding: 6px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: none;"><i class="fa-solid fa-pen"></i></a>

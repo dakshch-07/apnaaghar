@@ -57,7 +57,7 @@ $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->
                 <tr class="property-row">
                     <td style="color: var(--text-body); font-weight: 500;"><?php echo $serial++; ?></td>
                     <td>
-                        <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : '../'.$prop['image_url']; ?>" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                        <img src="<?php echo strpos($prop['image_url'], 'uploads/') === 0 ? '../'.$prop['image_url'] : $prop['image_url']; ?>" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                     </td>
                     <td>
                         <strong style="color: var(--text-heading); font-size: 1rem;"><?php echo htmlspecialchars($prop['title']); ?></strong><br>

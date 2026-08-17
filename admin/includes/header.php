@@ -65,8 +65,35 @@ $current_page = basename($_SERVER['PHP_SELF']);
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            z-index: 100; border-right: 1px solid var(--primary);
+            z-index: 200;
+            border-right: 1px solid var(--primary);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        /* Sidebar Overlay for Mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 150;
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.active { display: block; }
+        
+        /* Hamburger Button */
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            color: var(--text-heading);
+            font-size: 1.3rem;
+            transition: background 0.2s;
+        }
+        .hamburger-btn:hover { background: var(--card-border); }
         
         .sidebar-header {
             padding: 2rem 1.5rem;
@@ -124,6 +151,61 @@ $current_page = basename($_SERVER['PHP_SELF']);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+        }
+        
+        /* ==================== RESPONSIVE MOBILE ==================== */
+        @media (max-width: 768px) {
+            body { display: block; }
+            
+            /* Sidebar hidden off-screen by default on mobile */
+            .sidebar {
+                transform: translateX(-100%);
+                width: 270px;
+                z-index: 200;
+            }
+            .sidebar.open { transform: translateX(0); }
+            
+            /* Main content takes full width on mobile */
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            /* Topbar adjustments for mobile */
+            .topbar {
+                padding: 1rem 1.25rem;
+                gap: 0.75rem;
+            }
+            .topbar-title { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55vw; }
+            .admin-profile span { display: none; }
+            
+            /* Show hamburger on mobile */
+            .hamburger-btn { display: flex; align-items: center; justify-content: center; }
+            
+            /* Content area padding reduced on mobile */
+            .content-area { padding: 1.25rem; }
+            
+            /* Cards on mobile: remove hover lift */
+            .card:hover { transform: none; }
+            
+            /* Tables: horizontal scroll on mobile */
+            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; }
+            table { min-width: 540px; }
+            
+            /* Forms: single column on mobile */
+            div[style*='grid-template-columns: 1fr 1fr'] {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            
+            /* Stat cards grid on mobile */
+            .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr !important; }
+            .topbar-title { font-size: 0.9rem; }
+            .btn { padding: 0.65rem 1rem; font-size: 0.85rem; }
         }
         
         .topbar {
@@ -243,12 +325,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </head>
 <body>
 
-<div class="sidebar">
+<!-- Mobile Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
     <div class="sidebar-header" style="justify-content: flex-start; padding: 1.5rem;">
         <div style="background: #fff; padding: 6px; border-radius: 8px; margin-right: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--primary);">
             <img src="../logo.png" alt="Apnaa Ghar" style="max-height: 35px; object-fit: contain;">
         </div>
         <h2 style="font-size: 1.15rem; margin: 0; color: #fff; letter-spacing: 0.5px;">ApnaaGhar</h2>
+        <!-- Close button for mobile sidebar -->
+        <button onclick="closeSidebar()" style="margin-left:auto; background:none; border:none; color:rgba(255,255,255,0.6); font-size:1.3rem; cursor:pointer; padding:4px 8px; border-radius:4px; display:none;" id="sidebarClose"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="nav-menu">
         <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
@@ -268,6 +355,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <div class="main-content">
     <div class="topbar">
+        <!-- Hamburger for mobile -->
+        <button class="hamburger-btn" onclick="openSidebar()" id="hamburgerBtn" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         <div class="topbar-title">
             <?php 
                 if($current_page == 'dashboard.php') echo 'Dashboard Overview';
