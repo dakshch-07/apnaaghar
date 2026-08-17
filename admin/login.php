@@ -229,40 +229,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         @media (max-width: 768px) {
             .login-card {
-    display: flex;
-    width: 100%;
-    max-width: 950px;
-    background: transparent;
-    border-radius: 20px;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-    overflow: hidden;
-    animation: scaleUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    margin: 2rem;
-    border: 1px solid rgba(199,154,74,0.3);
-}
+                flex-direction: column;
+                margin: 1rem;
+                border-radius: 16px;
+            }
             .login-left {
-    flex: 1;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 3rem;
-    position: relative;
-}
+                padding: 2rem;
+                flex: none;
+            }
+            .login-left img {
+                max-width: 150px;
+            }
             .login-right {
-    flex: 1;
-    padding: 4rem 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: rgba(11, 27, 51, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-left: 1px solid rgba(255,255,255,0.05);
-}
+                padding: 2.5rem 2rem;
+                border-left: none;
+                border-top: 1px solid rgba(255,255,255,0.05);
+            }
+            .login-title {
+                font-size: 1.75rem;
+            }
         }
             .login-bg {
     position: fixed;
