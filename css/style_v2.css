@@ -3413,3 +3413,9 @@ a {
 .modal-image-wrapper .swiper-button-prev:hover {
   background: var(--primary-gold);
 }
+@media (max-width: 768px) {
+  .property-card-slider .swiper-button-next,
+  .property-card-slider .swiper-button-prev {
+    opacity: 1 !important;
+  }
+}
