@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'includes/db.php';
 
 if (!isset($_GET['id'])) {
@@ -41,10 +41,10 @@ if (strpos($target_data, 'http') === 0 || strpos($target_data, 'uploads/') === 0
     exit;
 }
 
-// Parse base64 data URI
-if (preg_match('/^data:(image\/[a-zA-Z]+);base64,(.*)$/', $target_data, $matches)) {
-    $mime = $matches[1];
-    $base64 = $matches[2];
+// Parse base64 data URI using string functions to avoid PCRE backtrack limits on large strings
+if (strpos($target_data, 'data:image/') === 0 && strpos($target_data, ';base64,') !== false) {
+    list($meta, $base64) = explode(';base64,', $target_data, 2);
+    $mime = str_replace('data:', '', $meta);
     
     // Enable caching for 30 days to save Vercel bandwidth/compute
     $etag = md5($target_data);

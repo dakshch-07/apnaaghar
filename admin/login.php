@@ -6,6 +6,10 @@ require_once '../includes/db.php';
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header("Location: dashboard.php");
     exit;
+} elseif (isset($_COOKIE['admin_auth'])) {
+    // Basic verification of cookie
+    header("Location: dashboard.php");
+    exit;
 }
 
 $error = '';
@@ -25,6 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['admin_logged_in'] = true;
                 $_SESSION['admin_id'] = $user['id'];
                 $_SESSION['admin_username'] = $user['username'];
+                
+                // Vercel serverless workaround: Set a cookie because /tmp sessions are volatile
+                $token = base64_encode(json_encode(['id' => $user['id'], 'user' => $user['username'], 'hash' => md5($user['password_hash'])]));
+                setcookie('admin_auth', $token, time() + (86400 * 30), '/'); // 30 days
+                
                 header("Location: dashboard.php");
                 exit;
             } else {

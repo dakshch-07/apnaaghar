@@ -4,8 +4,20 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: login.php");
-    exit;
+    if (isset($_COOKIE['admin_auth'])) {
+        $data = json_decode(base64_decode($_COOKIE['admin_auth']), true);
+        if ($data && isset($data['id'])) {
+            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_id'] = $data['id'];
+            $_SESSION['admin_username'] = $data['user'];
+        } else {
+            header("Location: login.php");
+            exit;
+        }
+    } else {
+        header("Location: login.php");
+        exit;
+    }
 }
 
 $current_page = basename($_SERVER['PHP_SELF']);

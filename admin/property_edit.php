@@ -220,3 +220,18 @@ $connectivity_str = $connectivity_arr ? implode("\n", $connectivity_arr) : '';
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput && fileInput.files.length > 0) {
+        let totalSize = 0;
+        for (let i = 0; i < fileInput.files.length; i++) {
+            totalSize += fileInput.files[i].size;
+        }
+        if (totalSize > 4 * 1024 * 1024) {
+            e.preventDefault();
+            alert('Total image size exceeds 4MB. Please compress your images or upload fewer images at once to bypass Vercel limits.');
+        }
+    }
+});
+</script>
