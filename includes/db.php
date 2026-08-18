@@ -12,6 +12,14 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // Fetch associative arrays by default
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    // Auto-migration for images_json column
+    try {
+        $pdo->exec("ALTER TABLE properties ADD COLUMN images_json LONGTEXT NULL AFTER image_url");
+    } catch(PDOException $e) {
+        // Ignore duplicate column errors or other errors during auto-migration
+    }
+
 } catch(PDOException $e) {
     die("ERROR: Could not connect to the database. " . $e->getMessage());
 }
