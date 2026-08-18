@@ -3326,3 +3326,32 @@ a {
     font-size: 1.1rem;
   }
 }
+
+/* COMPREHENSIVE MOBILE OVERRIDES */
+@media (max-width: 768px) {
+  body, html { overflow-x: hidden; width: 100%; }
+  .container { padding: 0 15px !important; }
+  .grid, .properties-grid, .categories-grid, .services-grid, .about-grid-layout, .contact-grid-layout, .footer-top-grid, .modal-grid, .service-modal-grid { 
+    grid-template-columns: 1fr !important; gap: 1.5rem !important; 
+  }
+  .modal-container, .service-modal-container { 
+    width: 95% !important; padding: 1.5rem !important; max-height: 90vh !important; overflow-y: auto !important; 
+  }
+  .modal-image-wrapper { height: 250px !important; }
+  .modal-pricing-table th, .modal-pricing-table td { padding: 0.5rem !important; font-size: 0.85rem !important; }
+  .section-padding { padding: 3rem 0 !important; }
+  .hero { padding-top: 100px !important; padding-bottom: 40px !important; }
+  .hero-title { font-size: 2.2rem !important; line-height: 1.2 !important; }
+  .property-image-box { height: 220px !important; }
+  .property-content { padding: 1.25rem !important; }
+  .about-visuals, .about-img-main-wrapper { height: auto !important; min-height: 250px !important; }
+  .about-img-main { position: static !important; }
+  .footer-widget-header { margin-bottom: 1rem !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 1.8rem !important; }
+  .section-title { font-size: 1.6rem !important; }
+  .btn-large { padding: 0.8rem 1.5rem !important; font-size: 0.95rem !important; }
+  .quote-text { font-size: 1.4rem !important; }
+}
