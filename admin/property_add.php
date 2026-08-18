@@ -179,17 +179,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php require_once 'includes/footer.php'; ?>
 <script>
-document.querySelector('form').addEventListener('submit', function(e) {
+async function compressImage(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const max_dim = 1600;
+                if (width > max_dim || height > max_dim) {
+                    if (width > height) {
+                        height = Math.round(height * (max_dim / width));
+                        width = max_dim;
+                    } else {
+                        width = Math.round(width * (max_dim / height));
+                        height = max_dim;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                let quality = 0.8;
+                let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                
+                // Compress until it's around 350KB max to easily fit 10 images in Vercel's 4.5MB limit
+                while(dataUrl.length > 350000 && quality > 0.1) {
+                    quality -= 0.1;
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+                
+                fetch(dataUrl)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {type: 'image/jpeg'}));
+                    });
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+document.querySelector('form').addEventListener('submit', async function(e) {
     const fileInput = document.querySelector('input[type="file"]');
     if (fileInput && fileInput.files.length > 0) {
         let totalSize = 0;
         for (let i = 0; i < fileInput.files.length; i++) {
             totalSize += fileInput.files[i].size;
         }
-        // Vercel payload limit is 4.5MB
-        if (totalSize > 4 * 1024 * 1024) {
+        
+        // If total size > 3.5MB, intercept and compress
+        if (totalSize > 3.5 * 1024 * 1024) {
             e.preventDefault();
-            alert('Total image size exceeds 4MB. Please compress your images or upload fewer images at once to bypass Vercel limits.');
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing images, please wait...';
+            submitBtn.disabled = true;
+            
+            const dataTransfer = new DataTransfer();
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                if (file.type.startsWith('image/')) {
+                    const compressed = await compressImage(file);
+                    dataTransfer.items.add(compressed);
+                } else {
+                    dataTransfer.items.add(file);
+                }
+            }
+            
+            fileInput.files = dataTransfer.files;
+            this.submit(); // Continue submission with compressed files
         }
     }
 });
