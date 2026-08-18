@@ -3421,3 +3421,67 @@ a {
     opacity: 1 !important;
   }
 }
+@media (max-width: 768px) {
+  /* Make modal feel like a modern bottom sheet or well-fit card */
+  .modal-wrapper {
+    width: 95% !important;
+    max-height: 85vh !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-container {
+    width: 100% !important;
+    padding: 1.5rem !important;
+    overflow-y: auto !important;
+  }
+  .modal-close-btn {
+    top: 10px !important;
+    right: 15px !important;
+    z-index: 99 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+    font-size: 1.5rem !important;
+    padding: 0 !important;
+  }
+  .modal-image-wrapper {
+    border-radius: 8px !important;
+    margin-bottom: 1rem;
+  }
+  .modal-pricing-section, .modal-perks-section, .modal-cta-box {
+    padding: 1.25rem !important;
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.04) !important;
+    background: #fff !important;
+  }
+  .modal-pricing-table th, .modal-pricing-table td {
+    padding: 0.75rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  .modal-title {
+    font-size: 1.7rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.2 !important;
+  }
+  .modal-header {
+    margin-bottom: 1.5rem !important;
+    padding-right: 40px !important; /* Space for close button */
+  }
+  .modal-header-meta {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+}
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
