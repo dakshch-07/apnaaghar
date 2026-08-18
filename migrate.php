@@ -1,0 +1,1 @@
+<?php require_once "includes/db.php"; try { $pdo->exec("ALTER TABLE properties ADD COLUMN images_json LONGTEXT NULL AFTER image_url"); echo "SUCCESS: Column images_json added."; } catch (PDOException $e) { if (strpos($e->getMessage(), "Duplicate column name") !== false) { echo "SUCCESS: Column images_json already exists."; } else { echo "ERROR: " . $e->getMessage(); } } ?>

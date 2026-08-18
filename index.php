@@ -14,7 +14,7 @@ foreach ($properties as $prop) {
         'type' => $prop['type'],
         'location' => $prop['location'],
         'price' => $prop['price'],
-        'image' => (strpos($prop['image_url'], 'http') === 0) ? $prop['image_url'] : $prop['image_url'],
+        'image' => 'image.php?id=' . $prop['id'],
         'status' => $prop['status'],
         'configs' => [
             [
@@ -221,10 +221,9 @@ $villaCount = $stmtVilla->fetchColumn();
           <?php 
           $hero_props = array_slice($properties, 0, 5);
           foreach($hero_props as $hp): 
-              $hp_img = strpos($hp['image_url'], 'http') === 0 ? $hp['image_url'] : $hp['image_url'];
           ?>
           <div class="swiper-slide">
-            <img src="<?php echo htmlspecialchars($hp_img); ?>" alt="Background" class="hero-img" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="image.php?id=<?php echo $hp['id']; ?>" alt="Background" class="hero-img" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
           <?php endforeach; ?>
         </div>
@@ -295,15 +294,15 @@ $villaCount = $stmtVilla->fetchColumn();
             <div class="property-image-box swiper property-card-slider">
               <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                  <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : $prop['image_url']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
+                  <img src="image.php?id=<?php echo $prop['id']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
                 </div>
                 <?php
                 if (!empty($prop['images_json'])) {
                     $extra_images = json_decode($prop['images_json'], true);
                     if (is_array($extra_images)) {
-                        foreach ($extra_images as $img) {
+                        foreach ($extra_images as $idx => $img) {
                             echo '<div class="swiper-slide">';
-                            echo '<img src="'.(strpos($img, 'http') === 0 ? $img : $img).'" alt="'.htmlspecialchars($prop['title']).'" class="property-img">';
+                            echo '<img src="image.php?id='.$prop['id'].'&idx='.$idx.'" alt="'.htmlspecialchars($prop['title']).'" class="property-img">';
                             echo '</div>';
                         }
                     }

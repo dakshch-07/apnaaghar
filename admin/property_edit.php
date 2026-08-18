@@ -29,8 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $highlights_json = json_encode(array_values($highlights));
     $connectivity_json = json_encode(array_values($connectivity));
     
-    $image_url = $_POST['current_image'] ?? '';
-    $images_json = $_POST['current_images_json'] ?? NULL;
+    $stmtOld = $pdo->prepare("SELECT image_url, images_json FROM properties WHERE id = ?");
+    $stmtOld->execute([$id]);
+    $oldProp = $stmtOld->fetch();
+    
+    $image_url = $oldProp['image_url'] ?? '';
+    $images_json = $oldProp['images_json'] ?? NULL;
     $additional_images = [];
     $new_images_uploaded = false;
     
@@ -158,17 +162,15 @@ $connectivity_str = $connectivity_arr ? implode("\n", $connectivity_arr) : '';
             <div class="form-group">
                 <label>Upload New Images (PC) - Max 10. Leave blank to keep current</label>
                 <input type="file" name="images[]" multiple class="form-control" accept="image/*">
-                <input type="hidden" name="current_image" value="<?php echo htmlspecialchars($prop['image_url']); ?>">
-                <input type="hidden" name="current_images_json" value="<?php echo htmlspecialchars($prop['images_json'] ?? ''); ?>">
                 <?php if($prop['image_url']): ?>
                 <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <img src="<?php echo strpos($prop['image_url'], 'uploads/') === 0 ? '../'.$prop['image_url'] : $prop['image_url']; ?>" style="height: 60px; border-radius: 4px; border: 2px solid var(--primary);">
+                    <img src="../image.php?id=<?php echo $prop['id']; ?>" style="height: 60px; border-radius: 4px; border: 2px solid var(--primary);">
                     <?php 
                     if (!empty($prop['images_json'])) {
                         $add_imgs = json_decode($prop['images_json'], true);
                         if (is_array($add_imgs)) {
-                            foreach ($add_imgs as $img) {
-                                echo '<img src="'.(strpos($img, 'uploads/') === 0 ? '../'.$img : $img).'" style="height: 60px; border-radius: 4px; border: 1px solid #ccc;">';
+                            foreach ($add_imgs as $idx => $img) {
+                                echo '<img src="../image.php?id='.$prop['id'].'&idx='.$idx.'" style="height: 60px; border-radius: 4px; border: 1px solid #ccc;">';
                             }
                         }
                     }
