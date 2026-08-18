@@ -38,7 +38,7 @@ $propertiesJsonObj = [];
 foreach ($properties as $prop) {
     $propId = 'property-' . $prop['id'];
     $images = ['image.php?id=' . $prop['id']];
-    $extra = json_decode($prop['images_json'], true);
+    $extra = !empty($prop['images_json']) ? json_decode($prop['images_json'], true) : [];
     if (is_array($extra)) {
         foreach ($extra as $idx => $img) {
             $images[] = 'image.php?id='.$prop['id'].'&idx='.$idx;
@@ -60,8 +60,8 @@ foreach ($properties as $prop) {
                 'price' => $prop['price']
             ]
         ],
-        'highlights' => json_decode($prop['highlights_json'], true) ?: [],
-        'connectivity' => json_decode($prop['connectivity_json'], true) ?: []
+        'highlights' => !empty($prop['highlights_json']) ? json_decode($prop['highlights_json'], true) : [],
+        'connectivity' => !empty($prop['connectivity_json']) ? json_decode($prop['connectivity_json'], true) : []
     ];
 }
 ?>

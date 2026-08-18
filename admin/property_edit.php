@@ -93,11 +93,11 @@ if (!$prop) {
     exit;
 }
 
-$highlights_arr = json_decode($prop['highlights_json'], true);
-$highlights_str = $highlights_arr ? implode("\n", $highlights_arr) : '';
+$highlights_arr = !empty($prop['highlights_json']) ? json_decode($prop['highlights_json'], true) : [];
+$highlights_str = is_array($highlights_arr) ? implode("\n", $highlights_arr) : '';
 
-$connectivity_arr = json_decode($prop['connectivity_json'], true);
-$connectivity_str = $connectivity_arr ? implode("\n", $connectivity_arr) : '';
+$connectivity_arr = !empty($prop['connectivity_json']) ? json_decode($prop['connectivity_json'], true) : [];
+$connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_arr) : '';
 
 ?>
 
@@ -167,7 +167,7 @@ $connectivity_str = $connectivity_arr ? implode("\n", $connectivity_arr) : '';
                     <img src="../image.php?id=<?php echo $prop['id']; ?>" style="height: 60px; border-radius: 4px; border: 2px solid var(--primary);">
                     <?php 
                     if (!empty($prop['images_json'])) {
-                        $add_imgs = json_decode($prop['images_json'], true);
+                        $add_imgs = !empty($prop['images_json']) ? json_decode($prop['images_json'], true) : [];
                         if (is_array($add_imgs)) {
                             foreach ($add_imgs as $idx => $img) {
                                 echo '<img src="../image.php?id='.$prop['id'].'&idx='.$idx.'" style="height: 60px; border-radius: 4px; border: 1px solid #ccc;">';

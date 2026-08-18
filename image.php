@@ -23,7 +23,7 @@ $target_data = '';
 if ($idx === -1) {
     $target_data = $prop['image_url'];
 } else {
-    $images = json_decode($prop['images_json'], true);
+    $images = !empty($prop['images_json']) ? json_decode($prop['images_json'], true) : [];
     if (is_array($images) && isset($images[$idx])) {
         $target_data = $images[$idx];
     }
