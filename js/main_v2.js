@@ -753,11 +753,37 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal-property-location').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${data.location}`;
     document.getElementById('modal-property-price').textContent = data.price;
 
-    // Set image
-    const imgEl = document.getElementById('modal-property-img');
-    if (imgEl) {
-      imgEl.src = data.image;
-      imgEl.alt = data.title;
+    // Set images in Swiper
+    const swiperWrapper = document.getElementById('modal-property-swiper-wrapper');
+    if (swiperWrapper) {
+      swiperWrapper.innerHTML = '';
+      if (data.images && data.images.length > 0) {
+        data.images.forEach(img => {
+          const slide = document.createElement('div');
+          slide.className = 'swiper-slide';
+          slide.innerHTML = `<img src="${img}" alt="${data.title}" class="modal-property-img">`;
+          swiperWrapper.appendChild(slide);
+        });
+      } else {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        slide.innerHTML = `<img src="${data.image}" alt="${data.title}" class="modal-property-img">`;
+        swiperWrapper.appendChild(slide);
+      }
+      
+      // Initialize or update Swiper
+      if (window.modalPropertySwiper) {
+        window.modalPropertySwiper.destroy(true, true);
+      }
+      window.modalPropertySwiper = new Swiper('#modal-property-slider', {
+        loop: false,
+        navigation: {
+          nextEl: '.modal-swiper-next',
+          prevEl: '.modal-swiper-prev',
+        },
+        observer: true,
+        observeParents: true
+      });
     }
 
     // Populate Pricing Table
@@ -841,8 +867,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = card.getAttribute('data-property-id');
 
     card.addEventListener('click', (e) => {
-      // Prevent opening if clicking bookmark
-      if (e.target.closest('.bookmark-btn')) return;
+      // Prevent opening if clicking bookmark or slider arrows
+      if (e.target.closest('.bookmark-btn') || e.target.closest('.swiper-button-next') || e.target.closest('.swiper-button-prev')) return;
 
       e.preventDefault();
       if (id) openPropertyModal(id);

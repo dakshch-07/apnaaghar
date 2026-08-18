@@ -9,12 +9,21 @@ $properties = $stmt->fetchAll();
 $propertiesJsonObj = [];
 foreach ($properties as $prop) {
     $propId = 'property-' . $prop['id'];
+    $images = ['image.php?id=' . $prop['id']];
+    $extra = json_decode($prop['images_json'], true);
+    if (is_array($extra)) {
+        foreach ($extra as $idx => $img) {
+            $images[] = 'image.php?id='.$prop['id'].'&idx='.$idx;
+        }
+    }
+    
     $propertiesJsonObj[$propId] = [
         'title' => $prop['title'],
         'type' => $prop['type'],
         'location' => $prop['location'],
         'price' => $prop['price'],
         'image' => 'image.php?id=' . $prop['id'],
+        'images' => $images,
         'status' => $prop['status'],
         'configs' => [
             [
@@ -958,8 +967,15 @@ $villaCount = $stmtVilla->fetchColumn();
         <div class="modal-grid">
           <!-- Left Column: Visuals & Pricing -->
           <div class="modal-visuals-panel">
-            <div class="modal-image-wrapper">
-              <img src="" alt="" id="modal-property-img" class="modal-property-img">
+            <div class="modal-image-wrapper swiper" id="modal-property-slider">
+              <div class="swiper-wrapper" id="modal-property-swiper-wrapper">
+                <!-- Slides injected via JS -->
+                <div class="swiper-slide">
+                  <img src="" alt="" id="modal-property-img" class="modal-property-img">
+                </div>
+              </div>
+              <div class="swiper-button-next modal-swiper-next"></div>
+              <div class="swiper-button-prev modal-swiper-prev"></div>
             </div>
             
             <div class="modal-pricing-section">

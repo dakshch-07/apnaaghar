@@ -3394,3 +3394,22 @@ a {
   height: 100%;
   z-index: -2;
 }
+/* MODAL SWIPER STYLES */
+.modal-image-wrapper .swiper-button-next,
+.modal-image-wrapper .swiper-button-prev {
+  color: var(--card-white);
+  background: rgba(17, 17, 17, 0.5);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: var(--transition-fast);
+}
+.modal-image-wrapper .swiper-button-next::after,
+.modal-image-wrapper .swiper-button-prev::after {
+  font-size: 14px;
+  font-weight: bold;
+}
+.modal-image-wrapper .swiper-button-next:hover,
+.modal-image-wrapper .swiper-button-prev:hover {
+  background: var(--primary-gold);
+}
