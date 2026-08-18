@@ -79,6 +79,9 @@ $villaCount = $stmtVilla->fetchColumn();
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/style_v2.css">
 
@@ -210,8 +213,21 @@ $villaCount = $stmtVilla->fetchColumn();
   <main>
     <!-- 3. HERO SECTION -->
     <section id="home" class="hero">
-      <div class="hero-bg-zoom">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="Apnaa Ghar Luxury Villa Background" class="hero-img">
+      <div class="hero-bg-swiper swiper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="Apnaa Ghar Luxury Villa Background" class="hero-img" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <?php 
+          $hero_props = array_slice($properties, 0, 5);
+          foreach($hero_props as $hp): 
+              $hp_img = strpos($hp['image_url'], 'http') === 0 ? $hp['image_url'] : $hp['image_url'];
+          ?>
+          <div class="swiper-slide">
+            <img src="<?php echo htmlspecialchars($hp_img); ?>" alt="Background" class="hero-img" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <?php endforeach; ?>
+        </div>
       </div>
       <div class="hero-overlay"></div>
       
@@ -276,8 +292,28 @@ $villaCount = $stmtVilla->fetchColumn();
         <div class="properties-grid">
           <?php foreach($properties as $prop): ?>
           <div class="property-card reveal-el" data-property-id="property-<?php echo $prop['id']; ?>">
-            <div class="property-image-box">
-              <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : $prop['image_url']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
+            <div class="property-image-box swiper property-card-slider">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : $prop['image_url']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
+                </div>
+                <?php
+                if (!empty($prop['images_json'])) {
+                    $extra_images = json_decode($prop['images_json'], true);
+                    if (is_array($extra_images)) {
+                        foreach ($extra_images as $img) {
+                            echo '<div class="swiper-slide">';
+                            echo '<img src="'.(strpos($img, 'http') === 0 ? $img : $img).'" alt="'.htmlspecialchars($prop['title']).'" class="property-img">';
+                            echo '</div>';
+                        }
+                    }
+                }
+                ?>
+              </div>
+              <!-- Swiper Navigation -->
+              <div class="swiper-button-next property-swiper-next"></div>
+              <div class="swiper-button-prev property-swiper-prev"></div>
+              
               <div class="property-badge-group">
                 <?php if(!empty($prop['badge_status'])): ?>
                 <span class="badge-status <?php echo $prop['badge_status'] == 'FOR RENT' ? 'for-rent' : 'for-sale'; ?>"><?php echo htmlspecialchars($prop['badge_status']); ?></span>
@@ -1029,10 +1065,43 @@ $villaCount = $stmtVilla->fetchColumn();
   <!-- CDN scripts for high-end animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   
   <script>
     // Inject dynamic properties data for GSAP modals
     window.dynamicPropertiesData = <?php echo json_encode($propertiesJsonObj, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE); ?>;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // Hero Background Slider
+      const heroSwiper = new Swiper('.hero-bg-swiper', {
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        loop: true,
+        autoplay: {
+          delay: 1700,
+          disableOnInteraction: false,
+        },
+        speed: 1000,
+        allowTouchMove: false
+      });
+
+      // Property Card Sliders
+      const propertySwipers = document.querySelectorAll('.property-card-slider');
+      propertySwipers.forEach(function(slider) {
+        new Swiper(slider, {
+          loop: true,
+          autoplay: {
+            delay: 1800,
+            disableOnInteraction: false,
+          },
+          speed: 800,
+          navigation: {
+            nextEl: slider.querySelector('.swiper-button-next'),
+            prevEl: slider.querySelector('.swiper-button-prev'),
+          },
+        });
+      });
+    });
   </script>
 
   <!-- Main Script -->

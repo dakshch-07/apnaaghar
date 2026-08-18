@@ -25,42 +25,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Image Upload Logic — Base64 encode and store in DB (Vercel has read-only filesystem)
     $image_url = '';
+    $additional_images = [];
     
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
         $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-        $filename = $_FILES['image']['name'];
-        $filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $max_size = 5 * 1024 * 1024; // 5MB limit
+        $file_count = count($_FILES['images']['name']);
+        $limit = min($file_count, 10); // Max 10 images total
         
-        if (!in_array($filetype, $allowed)) {
-            $error = "Invalid file type. Only JPG, PNG, WEBP, GIF allowed.";
-        } elseif ($_FILES['image']['size'] > $max_size) {
-            $error = "Image too large. Maximum size is 5MB.";
-        } else {
-            $mime_types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
-            $mime = $mime_types[$filetype] ?? 'image/jpeg';
-            $image_data = file_get_contents($_FILES['image']['tmp_name']);
-            if ($image_data !== false) {
-                $image_url = 'data:' . $mime . ';base64,' . base64_encode($image_data);
-            } else {
-                $error = "Failed to read uploaded image.";
+        for ($i = 0; $i < $limit; $i++) {
+            if ($_FILES['images']['error'][$i] == 0) {
+                $filename = $_FILES['images']['name'][$i];
+                $filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                
+                if (in_array($filetype, $allowed) && $_FILES['images']['size'][$i] <= $max_size) {
+                    $mime_types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
+                    $mime = $mime_types[$filetype] ?? 'image/jpeg';
+                    $image_data = file_get_contents($_FILES['images']['tmp_name'][$i]);
+                    if ($image_data !== false) {
+                        $base64_str = 'data:' . $mime . ';base64,' . base64_encode($image_data);
+                        if ($i === 0) {
+                            $image_url = $base64_str;
+                        } else {
+                            $additional_images[] = $base64_str;
+                        }
+                    }
+                }
             }
         }
-    } else {
+    }
+    
+    if (empty($image_url)) {
         // Fallback if they put a URL instead
         $image_url = $_POST['image_url_fallback'] ?? '';
     }
     
+    $images_json = !empty($additional_images) ? json_encode($additional_images) : NULL;
+    
     if (empty($error) && !empty($title) && !empty($image_url)) {
-        $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, status, badge_status, badge_featured, bhk, size, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, images_json, status, badge_status, badge_featured, bhk, size, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
-        if ($stmt->execute([$title, $type, $location, $price, $image_url, $status, $badge_status, $badge_featured, $bhk, $size, $highlights_json, $connectivity_json])) {
+        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $highlights_json, $connectivity_json])) {
             $success = "Property added successfully!";
         } else {
             $error = "Database error occurred.";
         }
     } elseif(empty($error)) {
-        $error = "Title and Image are required.";
+        $error = "Title and Main Image are required.";
     }
 }
 ?>
@@ -122,9 +133,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             
             <div class="form-group">
-                <label>Upload Image (PC)</label>
-                <input type="file" name="image" class="form-control" accept="image/*">
-                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Or use Image URL below if not uploading.</small>
+                <label>Upload Images (PC) - Max 10</label>
+                <input type="file" name="images[]" multiple class="form-control" accept="image/*">
+                <small style="color: var(--text-muted); display: block; margin-top: 5px;">First image will be the main thumbnail. You can upload up to 10 images at once. Or use Image URL below if not uploading.</small>
             </div>
             
             <div class="form-group">

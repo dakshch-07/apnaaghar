@@ -93,6 +93,9 @@ foreach ($properties as $prop) {
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style_v2.css">
 
@@ -310,8 +313,28 @@ foreach ($properties as $prop) {
               }
             ?>
           <div class="property-card reveal-el" data-property-id="property-<?php echo $prop['id']; ?>" data-location="<?php echo strtolower(str_replace([' ', ','], ['-', ''], $prop['location'])); ?>" data-bhk="<?php echo $data_bhk; ?>">
-            <div class="property-image-box">
-              <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : $prop['image_url']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
+            <div class="property-image-box swiper property-card-slider">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img src="<?php echo strpos($prop['image_url'], 'http') === 0 ? $prop['image_url'] : $prop['image_url']; ?>" alt="<?php echo htmlspecialchars($prop['title']); ?>" class="property-img">
+                </div>
+                <?php
+                if (!empty($prop['images_json'])) {
+                    $extra_images = json_decode($prop['images_json'], true);
+                    if (is_array($extra_images)) {
+                        foreach ($extra_images as $img) {
+                            echo '<div class="swiper-slide">';
+                            echo '<img src="'.(strpos($img, 'http') === 0 ? $img : $img).'" alt="'.htmlspecialchars($prop['title']).'" class="property-img">';
+                            echo '</div>';
+                        }
+                    }
+                }
+                ?>
+              </div>
+              <!-- Swiper Navigation -->
+              <div class="swiper-button-next property-swiper-next"></div>
+              <div class="swiper-button-prev property-swiper-prev"></div>
+              
               <div class="property-badge-group">
                 <?php if(!empty($prop['badge_status'])): ?>
                 <span class="badge-status <?php echo $prop['badge_status'] == 'FOR RENT' ? 'for-rent' : 'for-sale'; ?>"><?php echo htmlspecialchars($prop['badge_status']); ?></span>
@@ -557,10 +580,30 @@ foreach ($properties as $prop) {
   <!-- CDN scripts for high-end animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   
   <script>
     // Inject dynamic properties data from PHP for the modals
     window.dynamicPropertiesData = <?php echo json_encode($propertiesJsonObj); ?>;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // Property Card Sliders
+      const propertySwipers = document.querySelectorAll('.property-card-slider');
+      propertySwipers.forEach(function(slider) {
+        new Swiper(slider, {
+          loop: true,
+          autoplay: {
+            delay: 1800,
+            disableOnInteraction: false,
+          },
+          speed: 800,
+          navigation: {
+            nextEl: slider.querySelector('.swiper-button-next'),
+            prevEl: slider.querySelector('.swiper-button-prev'),
+          },
+        });
+      });
+    });
   </script>
 
   <!-- Main Script -->

@@ -30,35 +30,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connectivity_json = json_encode(array_values($connectivity));
     
     $image_url = $_POST['current_image'] ?? '';
+    $images_json = $_POST['current_images_json'] ?? NULL;
+    $additional_images = [];
+    $new_images_uploaded = false;
     
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    if (isset($_FILES['images']) && is_array($_FILES['images']['name']) && !empty($_FILES['images']['name'][0])) {
+        $new_images_uploaded = true;
         $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-        $filename = $_FILES['image']['name'];
-        $filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $max_size = 5 * 1024 * 1024; // 5MB limit
+        $file_count = count($_FILES['images']['name']);
+        $limit = min($file_count, 10);
         
-        if (!in_array($filetype, $allowed)) {
-            $error = "Invalid file type. Only JPG, PNG, WEBP, GIF allowed.";
-        } elseif ($_FILES['image']['size'] > $max_size) {
-            $error = "Image too large. Maximum size is 5MB.";
-        } else {
-            $mime_types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
-            $mime = $mime_types[$filetype] ?? 'image/jpeg';
-            $image_data = file_get_contents($_FILES['image']['tmp_name']);
-            if ($image_data !== false) {
-                $image_url = 'data:' . $mime . ';base64,' . base64_encode($image_data);
-            } else {
-                $error = "Failed to read uploaded image.";
+        for ($i = 0; $i < $limit; $i++) {
+            if ($_FILES['images']['error'][$i] == 0) {
+                $filename = $_FILES['images']['name'][$i];
+                $filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                
+                if (in_array($filetype, $allowed) && $_FILES['images']['size'][$i] <= $max_size) {
+                    $mime_types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp', 'gif' => 'image/gif'];
+                    $mime = $mime_types[$filetype] ?? 'image/jpeg';
+                    $image_data = file_get_contents($_FILES['images']['tmp_name'][$i]);
+                    if ($image_data !== false) {
+                        $base64_str = 'data:' . $mime . ';base64,' . base64_encode($image_data);
+                        if ($i === 0) {
+                            $image_url = $base64_str;
+                        } else {
+                            $additional_images[] = $base64_str;
+                        }
+                    }
+                }
             }
         }
+        $images_json = !empty($additional_images) ? json_encode($additional_images) : NULL;
     } elseif (!empty($_POST['image_url_fallback'])) {
         $image_url = $_POST['image_url_fallback'];
+        // If they use URL fallback, we might not touch additional images
     }
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
-        $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, highlights_json=?, connectivity_json=? WHERE id=?");
+        $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, highlights_json=?, connectivity_json=? WHERE id=?");
         
-        if ($stmt->execute([$title, $type, $location, $price, $image_url, $status, $badge_status, $badge_featured, $bhk, $size, $highlights_json, $connectivity_json, $id])) {
+        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $highlights_json, $connectivity_json, $id])) {
             $success = "Property updated successfully!";
         } else {
             $error = "Database error occurred.";
@@ -144,12 +156,25 @@ $connectivity_str = $connectivity_arr ? implode("\n", $connectivity_arr) : '';
             </div>
             
             <div class="form-group">
-                <label>Upload New Image (PC) - Leave blank to keep current</label>
-                <input type="file" name="image" class="form-control" accept="image/*">
+                <label>Upload New Images (PC) - Max 10. Leave blank to keep current</label>
+                <input type="file" name="images[]" multiple class="form-control" accept="image/*">
+                <input type="hidden" name="current_image" value="<?php echo htmlspecialchars($prop['image_url']); ?>">
+                <input type="hidden" name="current_images_json" value="<?php echo htmlspecialchars($prop['images_json'] ?? ''); ?>">
                 <?php if($prop['image_url']): ?>
-                <div style="margin-top: 10px;">
-                    <img src="<?php echo strpos($prop['image_url'], 'uploads/') === 0 ? '../'.$prop['image_url'] : $prop['image_url']; ?>" style="height: 60px; border-radius: 4px;">
+                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <img src="<?php echo strpos($prop['image_url'], 'uploads/') === 0 ? '../'.$prop['image_url'] : $prop['image_url']; ?>" style="height: 60px; border-radius: 4px; border: 2px solid var(--primary);">
+                    <?php 
+                    if (!empty($prop['images_json'])) {
+                        $add_imgs = json_decode($prop['images_json'], true);
+                        if (is_array($add_imgs)) {
+                            foreach ($add_imgs as $img) {
+                                echo '<img src="'.(strpos($img, 'uploads/') === 0 ? '../'.$img : $img).'" style="height: 60px; border-radius: 4px; border: 1px solid #ccc;">';
+                            }
+                        }
+                    }
+                    ?>
                 </div>
+                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Uploading new images will replace all current images.</small>
                 <?php endif; ?>
             </div>
             
