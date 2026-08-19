@@ -516,8 +516,8 @@ foreach ($properties as $prop) {
           <!-- Right Column: Description & Perks -->
           <div class="modal-details-panel">
             <div class="modal-perks-section">
-              <h3 class="modal-section-title"><i class="fa-solid fa-star"></i> Project Highlights</h3>
-              <ul class="modal-list" id="modal-property-highlights">
+              <h3 class="modal-section-title"><i class="fa-solid fa-star"></i> Amenities</h3>
+              <ul class="modal-list amenities-list" id="modal-property-highlights">
                 <!-- Dynamic List Items -->
               </ul>
             </div>

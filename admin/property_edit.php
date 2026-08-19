@@ -23,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bhk = $_POST['bhk'] ?? '';
     $size = $_POST['size'] ?? '';
     
-    $highlights = array_filter(array_map('trim', explode("\n", $_POST['highlights'] ?? '')));
+    $highlights_post = $_POST['highlights'] ?? [];
+    $highlights = is_array($highlights_post) ? $highlights_post : array_filter(array_map('trim', explode("\n", $highlights_post)));
     $connectivity = array_filter(array_map('trim', explode("\n", $_POST['connectivity'] ?? '')));
     
     $highlights_json = json_encode(array_values($highlights));
@@ -209,9 +210,31 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
                 <input type="text" name="image_url_fallback" class="form-control" placeholder="https://images.unsplash.com/..." value="<?php echo strpos($prop['image_url'], 'http') === 0 ? htmlspecialchars($prop['image_url']) : ''; ?>">
             </div>
             
-            <div class="form-group">
-                <label>Highlights (One per line)</label>
-                <textarea name="highlights" class="form-control" rows="5"><?php echo htmlspecialchars($highlights_str); ?></textarea>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Amenities</label>
+                <div class="amenities-container">
+                    <?php 
+                    $amenities_list = ['Meditation Center', 'Gym', 'Community Hall', 'Club House', 'Kids Play Area', 'Roof Top', 'Meeting Hall', 'Turf', 'Parking', 'Balcony', 'Basement', 'Cable TV', 'Ceiling Fan', 'Lift', 'Fitness Center', 'Online Application', 'Portal', 'Package Service', 'Pet Park', 'Refugee Area', 'Residents Lounge', 'Storage', 'Wheel Chair Access'];
+                    sort($amenities_list);
+                    foreach($amenities_list as $amenity): 
+                        $is_checked = in_array($amenity, $highlights_arr) ? 'checked' : '';
+                    ?>
+                        <label class="amenity-pill">
+                            <input type="checkbox" name="highlights[]" value="<?php echo htmlspecialchars($amenity); ?>" <?php echo $is_checked; ?>>
+                            <span class="pill-text"><i class="fa-solid fa-plus icon-plus"></i><i class="fa-solid fa-check icon-check" style="display:none;"></i> <?php echo htmlspecialchars($amenity); ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                <style>
+                    .amenities-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+                    .amenity-pill input { display: none; }
+                    .amenity-pill { cursor: pointer; }
+                    .pill-text { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #f0f2f5; border: 1px solid #e4e6eb; border-radius: 50px; font-size: 0.9rem; color: #4b4f56; transition: all 0.2s; }
+                    .pill-text i { font-size: 0.8rem; }
+                    .amenity-pill input:checked + .pill-text { background: var(--primary); color: #fff; border-color: var(--primary); }
+                    .amenity-pill input:checked + .pill-text .icon-plus { display: none; }
+                    .amenity-pill input:checked + .pill-text .icon-check { display: inline-block !important; }
+                </style>
             </div>
             
             <div class="form-group">
