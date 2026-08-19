@@ -34,13 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmtOld->execute([$id]);
     $oldProp = $stmtOld->fetch();
     
-    $image_url = $oldProp['image_url'] ?? '';
-    $images_json = $oldProp['images_json'] ?? NULL;
-    $additional_images = [];
-    $new_images_uploaded = false;
+    $final_images = [];
+    $final_main_image = '';
+
+    // 1. Keep selected existing images
+    if (isset($_POST['keep_main_image']) && $_POST['keep_main_image'] == '1') {
+        $final_main_image = $oldProp['image_url'] ?? '';
+    }
+    if (isset($_POST['keep_images']) && is_array($_POST['keep_images'])) {
+        $old_extra = !empty($oldProp['images_json']) ? json_decode($oldProp['images_json'], true) : [];
+        if (is_array($old_extra)) {
+            foreach ($_POST['keep_images'] as $idx) {
+                if (isset($old_extra[$idx])) {
+                    $final_images[] = $old_extra[$idx];
+                }
+            }
+        }
+    }
     
+    // 2. Add newly uploaded images
     if (isset($_FILES['images']) && is_array($_FILES['images']['name']) && !empty($_FILES['images']['name'][0])) {
-        $new_images_uploaded = true;
         $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
         $max_size = 5 * 1024 * 1024; // 5MB limit
         $file_count = count($_FILES['images']['name']);
@@ -57,20 +70,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $image_data = file_get_contents($_FILES['images']['tmp_name'][$i]);
                     if ($image_data !== false) {
                         $base64_str = 'data:' . $mime . ';base64,' . base64_encode($image_data);
-                        if ($i === 0) {
-                            $image_url = $base64_str;
+                        if (empty($final_main_image)) {
+                            $final_main_image = $base64_str;
                         } else {
-                            $additional_images[] = $base64_str;
+                            $final_images[] = $base64_str;
                         }
                     }
                 }
             }
         }
-        $images_json = !empty($additional_images) ? json_encode($additional_images) : NULL;
-    } elseif (!empty($_POST['image_url_fallback'])) {
-        $image_url = $_POST['image_url_fallback'];
-        // If they use URL fallback, we might not touch additional images
     }
+    
+    // 3. Fallback
+    if (empty($final_main_image) && !empty($_POST['image_url_fallback'])) {
+        $final_main_image = $_POST['image_url_fallback'];
+    }
+
+    $image_url = $final_main_image;
+    $images_json = !empty($final_images) ? json_encode($final_images) : NULL;
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
         $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, highlights_json=?, connectivity_json=? WHERE id=?");
@@ -171,20 +188,44 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
                 <label>Upload New Images (PC) - Max 10. Leave blank to keep current</label>
                 <input type="file" name="images[]" multiple class="form-control" accept="image/*">
                 <?php if($prop['image_url']): ?>
-                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <img src="../image.php?id=<?php echo $prop['id']; ?>" style="height: 60px; border-radius: 4px; border: 2px solid var(--primary);">
+                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;" id="existing-images-container">
+                    
+                    <div class="existing-img-wrapper" style="position: relative; display: inline-block;">
+                        <input type="hidden" name="keep_main_image" value="1" class="keep-img-input">
+                        <img src="../image.php?id=<?php echo $prop['id']; ?>&t=<?php echo time(); ?>" style="height: 80px; border-radius: 6px; border: 2px solid var(--primary);">
+                        <button type="button" class="delete-existing-img-btn" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+
                     <?php 
                     if (!empty($prop['images_json'])) {
                         $add_imgs = !empty($prop['images_json']) ? json_decode($prop['images_json'], true) : [];
                         if (is_array($add_imgs)) {
                             foreach ($add_imgs as $idx => $img) {
-                                echo '<img src="../image.php?id='.$prop['id'].'&idx='.$idx.'" style="height: 60px; border-radius: 4px; border: 1px solid #ccc;">';
+                                ?>
+                                <div class="existing-img-wrapper" style="position: relative; display: inline-block;">
+                                    <input type="hidden" name="keep_images[]" value="<?php echo $idx; ?>" class="keep-img-input">
+                                    <img src="../image.php?id=<?php echo $prop['id']; ?>&idx=<?php echo $idx; ?>&t=<?php echo time(); ?>" style="height: 80px; border-radius: 6px; border: 1px solid #ccc;">
+                                    <button type="button" class="delete-existing-img-btn" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                                <?php
                             }
                         }
                     }
                     ?>
                 </div>
-                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Uploading new images will replace all current images.</small>
+                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Click the <span style="color:red;font-weight:bold;">X</span> on any image to delete it. New uploads will be added to the remaining images!</small>
+                
+                <script>
+                document.querySelectorAll('.delete-existing-img-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const wrapper = this.closest('.existing-img-wrapper');
+                        // Remove the hidden input so it won't be sent to server as 'kept'
+                        wrapper.querySelector('.keep-img-input').remove();
+                        // Hide the wrapper visually
+                        wrapper.style.display = 'none';
+                    });
+                });
+                </script>
                 <?php endif; ?>
             </div>
             
