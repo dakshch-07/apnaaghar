@@ -131,7 +131,14 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
             
             <div class="form-group">
                 <label>Property Type</label>
-                <input type="text" name="type" class="form-control" required value="<?php echo htmlspecialchars($prop['type']); ?>">
+                <select name="type" class="form-control" required>
+                    <option value="" disabled>Select Property Type</option>
+                    <option value="Flat" <?php echo (strtolower(trim($prop['type'])) == 'flat') ? 'selected' : ''; ?>>Flat</option>
+                    <option value="House" <?php echo (strtolower(trim($prop['type'])) == 'house') ? 'selected' : ''; ?>>House</option>
+                    <option value="Townhouse" <?php echo (strtolower(trim($prop['type'])) == 'townhouse') ? 'selected' : ''; ?>>Townhouse</option>
+                    <option value="Open Plot" <?php echo (strtolower(trim($prop['type'])) == 'open plot') ? 'selected' : ''; ?>>Open Plot</option>
+                    <option value="Commercial" <?php echo (strtolower(trim($prop['type'])) == 'commercial') ? 'selected' : ''; ?>>Commercial</option>
+                </select>
             </div>
             
             <div class="form-group">

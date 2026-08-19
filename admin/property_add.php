@@ -104,7 +104,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             <div class="form-group">
                 <label>Property Type</label>
-                <input type="text" name="type" class="form-control" required placeholder="e.g. Luxury Tower, Penthouse">
+                <select name="type" class="form-control" required>
+                    <option value="" disabled selected>Select Property Type</option>
+                    <option value="Flat">Flat</option>
+                    <option value="House">House</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Open Plot">Open Plot</option>
+                    <option value="Commercial">Commercial</option>
+                </select>
             </div>
             
             <div class="form-group">
