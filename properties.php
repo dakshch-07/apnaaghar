@@ -297,6 +297,14 @@ foreach ($properties as $prop) {
               </div>
               <input type="hidden" name="bhk" id="filter-bhk" value="all">
             </div>
+            <div class="filter-divider"></div>
+            <div class="filter-group price-filter-group" style="flex-grow: 1.5; min-width: 200px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                 <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-charcoal);"><i class="fa-solid fa-indian-rupee-sign filter-icon" style="margin-right: 5px;"></i> Max Price</span>
+                 <span id="price-slider-val" style="font-weight: 700; color: var(--primary-gold); font-size: 0.9rem;">50 Cr</span>
+              </div>
+              <input type="range" id="filter-price" min="0.4" max="50" step="0.1" value="50" style="width: 100%; cursor: pointer; accent-color: var(--primary-gold);">
+            </div>
             <button type="submit" class="btn btn-gold filter-submit-btn">Search</button>
           </form>
           <div id="filter-no-results" class="no-results-msg" style="display: none;">
@@ -320,8 +328,24 @@ foreach ($properties as $prop) {
                   if (strpos($bhk_str, 'villa') !== false) $data_bhk = '4+';
                   else $data_bhk = 'commercial';
               }
+              
+              $price_str = strtolower(trim($prop['price']));
+              preg_match('/([\d\.]+)/', $price_str, $matches);
+              $price_cr = 50; // default
+              if (!empty($matches)) {
+                  $val = (float)$matches[1];
+                  if (strpos($price_str, 'cr') !== false) {
+                      $price_cr = $val;
+                  } elseif (strpos($price_str, 'lakh') !== false || strpos($price_str, 'lac') !== false) {
+                      $price_cr = $val / 100;
+                  } elseif ($val > 1000) { // raw number
+                      $price_cr = $val / 10000000;
+                  } else {
+                      $price_cr = $val;
+                  }
+              }
             ?>
-          <div class="property-card reveal-el" data-property-id="property-<?php echo $prop['id']; ?>" data-location="<?php echo strtolower(str_replace([' ', ','], ['-', ''], $prop['location'])); ?>" data-bhk="<?php echo $data_bhk; ?>">
+          <div class="property-card reveal-el" data-property-id="property-<?php echo $prop['id']; ?>" data-location="<?php echo strtolower(str_replace([' ', ','], ['-', ''], $prop['location'])); ?>" data-bhk="<?php echo $data_bhk; ?>" data-price="<?php echo $price_cr; ?>">
             <div class="property-image-box swiper property-card-slider">
               <div class="swiper-wrapper">
                 <div class="swiper-slide">

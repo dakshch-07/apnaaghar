@@ -958,23 +958,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const locSelect = document.getElementById('filter-location');
     const bhkSelect = document.getElementById('filter-bhk');
+    const priceSlider = document.getElementById('filter-price');
+    const priceSliderVal = document.getElementById('price-slider-val');
     const allCards = document.querySelectorAll('.properties-grid .property-card');
     const noResultsMsg = document.getElementById('filter-no-results');
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
 
+    if (priceSlider) {
+      priceSlider.addEventListener('input', (e) => {
+        let val = parseFloat(e.target.value);
+        if (val === 50) {
+           priceSliderVal.textContent = '50+ Cr';
+        } else if (val < 1) {
+           priceSliderVal.textContent = Math.round(val * 100) + ' Lakhs';
+        } else {
+           priceSliderVal.textContent = val.toFixed(2) + ' Cr';
+        }
+      });
+      priceSlider.addEventListener('change', () => {
+         applyFilters();
+      });
+    }
+
     const applyFilters = () => {
-      const locVal = locSelect.value;
-      const bhkVal = bhkSelect.value;
+      const locVal = locSelect ? locSelect.value : 'all';
+      const bhkVal = bhkSelect ? bhkSelect.value : 'all';
+      const maxPrice = priceSlider ? parseFloat(priceSlider.value) : 50;
       let visibleCount = 0;
 
       allCards.forEach(card => {
         const cardLoc = card.getAttribute('data-location');
         const cardBhk = card.getAttribute('data-bhk');
+        const cardPrice = parseFloat(card.getAttribute('data-price') || 50);
 
         let locMatch = (locVal === 'all' || (cardLoc && cardLoc.includes(locVal)));
         let bhkMatch = (bhkVal === 'all' || (cardBhk && cardBhk.split(',').includes(bhkVal)));
+        let priceMatch = (cardPrice <= maxPrice || maxPrice === 50);
 
-        if (locMatch && bhkMatch) {
+        if (locMatch && bhkMatch && priceMatch) {
           card.style.display = 'block'; // Cards are display: block normally, image box etc handles layout
           visibleCount++;
         } else {
@@ -982,10 +1003,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      if (visibleCount === 0) {
-        noResultsMsg.style.display = 'block';
-      } else {
-        noResultsMsg.style.display = 'none';
+      if (noResultsMsg) {
+        noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
       }
 
       if (typeof ScrollTrigger !== 'undefined') {
@@ -1002,6 +1021,10 @@ document.addEventListener('DOMContentLoaded', () => {
       clearFiltersBtn.addEventListener('click', () => {
         locSelect.value = 'all';
         bhkSelect.value = 'all';
+        if (priceSlider) {
+            priceSlider.value = 50;
+            priceSliderVal.textContent = '50+ Cr';
+        }
 
         // Reset custom dropdown UI visually
         document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
