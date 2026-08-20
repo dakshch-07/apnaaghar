@@ -195,7 +195,20 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
             
             <div class="form-group">
                 <label>Status</label>
-                <input type="text" name="status" class="form-control" required value="<?php echo htmlspecialchars($prop['status']); ?>">
+                <select name="status" class="form-control" required>
+                    <option value="" disabled <?php echo empty($prop['status']) ? 'selected' : ''; ?>>Select Status</option>
+                    <?php
+                    $known_statuses = ['ready to move', 'oc received', 'under construction'];
+                    $current_status = strtolower(trim($prop['status']));
+                    $is_known_status = in_array($current_status, $known_statuses);
+                    if (!$is_known_status && !empty($current_status)) {
+                        echo '<option value="'.htmlspecialchars($prop['status']).'" selected>'.htmlspecialchars($prop['status']).'</option>';
+                    }
+                    ?>
+                    <option value="Ready to move" <?php echo ($current_status == 'ready to move') ? 'selected' : ''; ?>>Ready to move</option>
+                    <option value="OC received" <?php echo ($current_status == 'oc received') ? 'selected' : ''; ?>>OC received</option>
+                    <option value="Under construction" <?php echo ($current_status == 'under construction') ? 'selected' : ''; ?>>Under construction</option>
+                </select>
             </div>
             
             <div class="form-group">

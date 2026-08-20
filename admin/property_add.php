@@ -140,7 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             <div class="form-group">
                 <label>Status</label>
-                <input type="text" name="status" class="form-control" required placeholder="e.g. OC Received">
+                <select name="status" class="form-control" required>
+                    <option value="" disabled selected>Select Status</option>
+                    <option value="Ready to move">Ready to move</option>
+                    <option value="OC received">OC received</option>
+                    <option value="Under construction">Under construction</option>
+                </select>
             </div>
             
             <div class="form-group">
