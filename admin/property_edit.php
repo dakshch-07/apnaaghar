@@ -150,12 +150,20 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
             <div class="form-group">
                 <label>Property Type</label>
                 <select name="type" class="form-control" required>
-                    <option value="" disabled>Select Property Type</option>
-                    <option value="Flat" <?php echo (strtolower(trim($prop['type'])) == 'flat') ? 'selected' : ''; ?>>Flat</option>
-                    <option value="House" <?php echo (strtolower(trim($prop['type'])) == 'house') ? 'selected' : ''; ?>>House</option>
-                    <option value="Townhouse" <?php echo (strtolower(trim($prop['type'])) == 'townhouse') ? 'selected' : ''; ?>>Townhouse</option>
-                    <option value="Open Plot" <?php echo (strtolower(trim($prop['type'])) == 'open plot') ? 'selected' : ''; ?>>Open Plot</option>
-                    <option value="Commercial" <?php echo (strtolower(trim($prop['type'])) == 'commercial') ? 'selected' : ''; ?>>Commercial</option>
+                    <option value="" disabled <?php echo empty($prop['type']) ? 'selected' : ''; ?>>Select Property Type</option>
+                    <?php
+                    $known_types = ['flat', 'house', 'townhouse', 'open plot', 'commercial'];
+                    $current_type = strtolower(trim($prop['type']));
+                    $is_known = in_array($current_type, $known_types);
+                    if (!$is_known && !empty($current_type)) {
+                        echo '<option value="'.htmlspecialchars($prop['type']).'" selected>'.htmlspecialchars($prop['type']).'</option>';
+                    }
+                    ?>
+                    <option value="Flat" <?php echo ($current_type == 'flat') ? 'selected' : ''; ?>>Flat</option>
+                    <option value="House" <?php echo ($current_type == 'house') ? 'selected' : ''; ?>>House</option>
+                    <option value="Townhouse" <?php echo ($current_type == 'townhouse') ? 'selected' : ''; ?>>Townhouse</option>
+                    <option value="Open Plot" <?php echo ($current_type == 'open plot') ? 'selected' : ''; ?>>Open Plot</option>
+                    <option value="Commercial" <?php echo ($current_type == 'commercial') ? 'selected' : ''; ?>>Commercial</option>
                 </select>
             </div>
             
