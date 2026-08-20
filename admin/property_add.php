@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $badge_featured = $_POST['badge_featured'] ?? '';
     $bhk = $_POST['bhk'] ?? '';
     $size = $_POST['size'] ?? '';
+    $description = $_POST['description'] ?? '';
     
     // Process Highlights and Connectivity (split by newline)
     $highlights_post = $_POST['highlights'] ?? [];
@@ -26,9 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Image Upload Logic — Base64 encode and store in DB (Vercel has read-only filesystem)
     $image_url = '';
+    $images_json = NULL;
     $additional_images = [];
     
-    if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
+    if (isset($_FILES['images']) && is_array($_FILES['images']['name']) && !empty($_FILES['images']['name'][0])) {
         $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
         $max_size = 5 * 1024 * 1024; // 5MB limit
         $file_count = count($_FILES['images']['name']);
@@ -54,19 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
+        $images_json = !empty($additional_images) ? json_encode($additional_images) : NULL;
+    } elseif (!empty($_POST['image_url_fallback'])) {
+        $image_url = $_POST['image_url_fallback'];
     }
-    
-    if (empty($image_url)) {
-        // Fallback if they put a URL instead
-        $image_url = $_POST['image_url_fallback'] ?? '';
-    }
-    
-    $images_json = !empty($additional_images) ? json_encode($additional_images) : NULL;
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
-        $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, images_json, status, badge_status, badge_featured, bhk, size, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, images_json, status, badge_status, badge_featured, bhk, size, description, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
-        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $highlights_json, $connectivity_json])) {
+        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json])) {
             $success = "Property added successfully!";
         } else {
             $error = "Database error occurred.";
@@ -131,8 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             
             <div class="form-group">
-                <label>Size / Area</label>
+                <label>Carpet Area</label>
                 <input type="text" name="size" class="form-control" required placeholder="e.g. 1,450 sq.ft">
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Property Description</label>
+                <textarea name="description" class="form-control" rows="4" placeholder="Enter a detailed description about the property..."></textarea>
             </div>
             
             <div class="form-group">

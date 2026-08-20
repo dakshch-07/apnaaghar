@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $badge_featured = $_POST['badge_featured'] ?? '';
     $bhk = $_POST['bhk'] ?? '';
     $size = $_POST['size'] ?? '';
+    $description = $_POST['description'] ?? '';
     
     $highlights_post = $_POST['highlights'] ?? [];
     $highlights = is_array($highlights_post) ? $highlights_post : array_filter(array_map('trim', explode("\n", $highlights_post)));
@@ -90,9 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $images_json = !empty($final_images) ? json_encode($final_images) : NULL;
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
-        $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, highlights_json=?, connectivity_json=? WHERE id=?");
+        $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, description=?, highlights_json=?, connectivity_json=? WHERE id=?");
         
-        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $highlights_json, $connectivity_json, $id])) {
+        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json, $id])) {
             $success = "Property updated successfully!";
         } else {
             $error = "Database error occurred.";
@@ -183,8 +184,13 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
             </div>
             
             <div class="form-group">
-                <label>Size / Area</label>
+                <label>Carpet Area</label>
                 <input type="text" name="size" class="form-control" required value="<?php echo htmlspecialchars($prop['size']); ?>">
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Property Description</label>
+                <textarea name="description" class="form-control" rows="4"><?php echo htmlspecialchars($prop['description'] ?? ''); ?></textarea>
             </div>
             
             <div class="form-group">

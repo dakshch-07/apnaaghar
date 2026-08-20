@@ -25,6 +25,7 @@ foreach ($properties as $prop) {
         'image' => 'image.php?id=' . $prop['id'],
         'images' => $images,
         'status' => $prop['status'],
+        'description' => $prop['description'] ?? '',
         'configs' => [
             [
                 'type' => $prop['bhk'],
@@ -976,6 +977,11 @@ $villaCount = $stmtVilla->fetchColumn();
               </div>
               <div class="swiper-button-next modal-swiper-next"></div>
               <div class="swiper-button-prev modal-swiper-prev"></div>
+            </div>
+            
+            <div class="modal-description-section" style="margin-bottom: 2rem;">
+              <h3 class="modal-section-title">Property Description</h3>
+              <p id="modal-property-desc" style="color: var(--text-gray); font-size: 0.95rem; line-height: 1.6;"></p>
             </div>
             
             <div class="modal-pricing-section">

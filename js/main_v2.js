@@ -752,6 +752,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal-property-status').textContent = data.status;
     document.getElementById('modal-property-location').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${data.location}`;
     document.getElementById('modal-property-price').textContent = data.price;
+    
+    const descEl = document.getElementById('modal-property-desc');
+    if (descEl) {
+      const descSection = descEl.closest('.modal-description-section');
+      if (data.description && data.description.trim() !== '') {
+        descEl.innerHTML = data.description.replace(/\n/g, '<br>');
+        descSection.style.display = 'block';
+      } else {
+        descSection.style.display = 'none';
+      }
+    }
 
     // Set images in Swiper
     const swiperWrapper = document.getElementById('modal-property-swiper-wrapper');
