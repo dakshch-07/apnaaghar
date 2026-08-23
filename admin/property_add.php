@@ -57,8 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
         $images_json = !empty($additional_images) ? json_encode($additional_images) : NULL;
-    } elseif (!empty($_POST['image_url_fallback'])) {
-        $image_url = $_POST['image_url_fallback'];
     }
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
@@ -188,11 +186,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="">None</option>
                     <option value="FEATURED">FEATURED</option>
                 </select>
-            </div>
-            
-            <div class="form-group" style="grid-column: span 2;">
-                <label>Image URL Fallback (Leave blank if uploading a file)</label>
-                <input type="text" name="image_url_fallback" class="form-control" placeholder="https://images.unsplash.com/...">
             </div>
             
             <div class="form-group" style="grid-column: span 2;">

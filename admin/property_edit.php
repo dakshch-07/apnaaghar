@@ -82,11 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     
-    // 3. Fallback
-    if (empty($final_main_image) && !empty($_POST['image_url_fallback'])) {
-        $final_main_image = $_POST['image_url_fallback'];
-    }
-
     $image_url = $final_main_image;
     $images_json = !empty($final_images) ? json_encode($final_images) : NULL;
     
@@ -290,11 +285,6 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
                     <option value="" <?php echo empty($prop['badge_featured']) ? 'selected' : ''; ?>>None</option>
                     <option value="FEATURED" <?php echo $prop['badge_featured'] == 'FEATURED' ? 'selected' : ''; ?>>FEATURED</option>
                 </select>
-            </div>
-            
-            <div class="form-group" style="grid-column: span 2;">
-                <label>Image URL Fallback (Leave blank if uploading a file)</label>
-                <input type="text" name="image_url_fallback" class="form-control" placeholder="https://images.unsplash.com/..." value="<?php echo strpos($prop['image_url'], 'http') === 0 ? htmlspecialchars($prop['image_url']) : ''; ?>">
             </div>
             
             <div class="form-group" style="grid-column: span 2;">

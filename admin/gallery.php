@@ -56,8 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                     $error = "Failed to read uploaded image.";
                 }
             }
-        } elseif(empty($image_url)) {
-            $image_url = $_POST['image_url_fallback'] ?? '';
         }
         
         if (empty($error) && !empty($title) && !empty($category) && !empty($image_url)) {
@@ -142,11 +140,6 @@ $gallery_items = $pdo->query("SELECT * FROM gallery ORDER BY created_at DESC")->
                         <img src="<?php echo strpos($edit_item['image_url'], 'uploads/') === 0 ? '../'.$edit_item['image_url'] : $edit_item['image_url']; ?>" style="width:100%; border-radius:8px; border:1px solid var(--card-border);">
                     </div>
                 <?php endif; ?>
-            </div>
-            
-            <div class="form-group">
-                <label>Or Image URL Fallback</label>
-                <input type="text" name="image_url_fallback" class="form-control" placeholder="https://..." value="<?php echo ($edit_item && strpos($edit_item['image_url'], 'http') === 0) ? htmlspecialchars($edit_item['image_url']) : ''; ?>">
             </div>
             
             <div style="display:flex; gap:10px;">
