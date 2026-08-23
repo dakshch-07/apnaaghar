@@ -1,0 +1,1 @@
+<?php require "includes/db.php"; try { $pdo->exec("ALTER TABLE properties ADD COLUMN description TEXT NULL AFTER size"); echo "Description column added."; } catch (PDOException $e) { echo "Description Error: " . $e->getMessage() . "<br>"; } ?>
