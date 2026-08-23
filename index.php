@@ -634,17 +634,17 @@ $villaCount = $stmtVilla->fetchColumn();
             <!-- Slide 2 -->
             <div class="testimonial-slide">
               <div class="testi-header">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&h=150&q=80" alt="Priya Kadam" class="testi-avatar">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150&q=80" alt="Meera Iyer" class="testi-avatar">
                 <div class="testi-info">
-                  <h4>Priya Kadam</h4>
+                  <h4>Meera Iyer</h4>
                   <div class="testi-stars">★★★★★</div>
-                  <span class="testi-relation">Rented Penthouse in Tilak Nagar</span>
+                  <span class="testi-relation">Sold Apartment in Ghatkopar</span>
                 </div>
               </div>
               <p class="testi-text">
-                "Finding an inclusive and safe environment as a minority couple was extremely important to us. Apnaa Ghar is truly friendly and respectful. They found us a beautiful home without any judgment."
+                "Apnaa Ghar Real Estate made selling our property a breeze. Their deep understanding of the local market helped us get the right valuation, and the entire paperwork process was handled flawlessly. Highly recommended!"
               </p>
-              <div class="review-highlight-tag">Friendly environment</div>
+              <div class="review-highlight-tag">Expert market knowledge</div>
             </div>
 
             <!-- Slide 3 -->

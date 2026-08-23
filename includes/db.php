@@ -20,6 +20,13 @@ try {
         // Ignore duplicate column errors or other errors during auto-migration
     }
 
+    // Auto-migration for description column
+    try {
+        $pdo->exec("ALTER TABLE properties ADD COLUMN description LONGTEXT NULL AFTER size");
+    } catch(PDOException $e) {
+        // Ignore duplicate column errors or other errors during auto-migration
+    }
+
 } catch(PDOException $e) {
     die("ERROR: Could not connect to the database. " . $e->getMessage());
 }
