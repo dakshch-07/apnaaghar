@@ -59,22 +59,22 @@ $villaCount = $stmtVilla->fetchColumn();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Primary Meta Tags -->
-  <title>Apnaa Ghar Real Estate | Premium Properties in Chembur, Mumbai</title>
-  <meta name="title" content="Apnaa Ghar Real Estate | Premium Properties in Chembur, Mumbai">
+  <title>Apnaa Ghar Real Estate & Interior | Premium Properties in Chembur, Mumbai</title>
+  <meta name="title" content="Apnaa Ghar Real Estate & Interior | Premium Properties in Chembur, Mumbai">
   <meta name="description" content="Discover luxury apartments, penthouses, commercial spaces, and villas in Chembur, Mumbai. Guided by trust, integrity, and transparency. 4.9 rated agency with 58+ reviews.">
-  <meta name="keywords" content="Apnaa Ghar Real Estate, Chembur Real Estate, Mumbai Luxury Properties, Buy Flat Chembur, Real Estate Agent Tilak Nagar, Kurla, Ghatkopar, Mumbai">
+  <meta name="keywords" content="Apnaa Ghar Real Estate & Interior, Chembur Real Estate, Mumbai Luxury Properties, Buy Flat Chembur, Real Estate Agent Tilak Nagar, Kurla, Ghatkopar, Mumbai">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://apnaagharrealestate.in/">
-  <meta property="og:title" content="Apnaa Ghar Real Estate | Luxury Homes in Mumbai">
+  <meta property="og:title" content="Apnaa Ghar Real Estate & Interior | Luxury Homes in Mumbai">
   <meta property="og:description" content="Discover premium apartments, modern interiors, and investment properties in Chembur, Ghatkopar, and Tilak Nagar. 4.9 Google rating.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://apnaagharrealestate.in/">
-  <meta property="twitter:title" content="Apnaa Ghar Real Estate | Luxury Homes in Mumbai">
+  <meta property="twitter:title" content="Apnaa Ghar Real Estate & Interior | Luxury Homes in Mumbai">
   <meta property="twitter:description" content="Discover premium apartments, modern interiors, and investment properties in Chembur, Ghatkopar, and Tilak Nagar. 4.9 Google rating.">
   <meta property="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
 
@@ -102,7 +102,7 @@ $villaCount = $stmtVilla->fetchColumn();
   {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Apnaa Ghar Real Estate",
+    "name": "Apnaa Ghar Real Estate & Interior",
     "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
     "@id": "https://apnaagharrealestate.in/#agent",
     "url": "https://apnaagharrealestate.in/",
@@ -152,8 +152,8 @@ $villaCount = $stmtVilla->fetchColumn();
   <div id="preloader" class="preloader">
     <div class="preloader-content">
       <div class="preloader-logo" style="margin-bottom: 1.5rem;">
-        <img src="logo.png" alt="Apnaa Ghar" style="height: 120px; padding: 15px; background: #ffffff; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin-bottom: 10px;">
-        <span class="logo-text-cormorant" style="margin-top: 15px; display: block;">Apnaa Ghar</span>
+        <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 120px; padding: 15px; background: #ffffff; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin-bottom: 10px;">
+        <span class="logo-text-cormorant" style="margin-top: 15px; display: block;">Apnaa Ghar Real Estate & Interior</span>
         <span class="logo-subtext">REAL ESTATE</span>
       </div>
       <div class="preloader-bar-container">
@@ -171,7 +171,7 @@ $villaCount = $stmtVilla->fetchColumn();
   <header id="header" class="header">
     <div class="container navbar-container">
       <a href="#home" class="logo magnetic" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-        <img src="logo.png" alt="Apnaa Ghar Real Estate" style="height: 55px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
+        <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 55px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
       </a>
       
       <nav id="nav-menu" class="nav-menu">
@@ -201,7 +201,7 @@ $villaCount = $stmtVilla->fetchColumn();
   <!-- MOBILE NAVIGATION DRAWER -->
   <div class="mobile-drawer" id="mobile-drawer">
     <div class="mobile-drawer-header" style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem;">
-      <img src="logo.png" alt="Apnaa Ghar" style="height: 40px; object-fit: contain; mix-blend-mode: multiply;">
+      <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 40px; object-fit: contain; mix-blend-mode: multiply;">
       <button class="drawer-close" id="drawer-close">&times;</button>
     </div>
     <nav class="mobile-drawer-nav">
@@ -226,7 +226,7 @@ $villaCount = $stmtVilla->fetchColumn();
       <div class="hero-bg-swiper swiper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="Apnaa Ghar Luxury Villa Background" class="hero-img" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="Apnaa Ghar Real Estate & Interior Luxury Villa Background" class="hero-img" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
           <?php 
           $hero_props = array_slice($properties, 0, 5);
@@ -367,7 +367,7 @@ $villaCount = $stmtVilla->fetchColumn();
           <!-- Left: Split Luxury Photography with Parallax Elements -->
           <div class="about-visuals reveal-el">
             <div class="about-img-main-wrapper">
-              <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="Apnaa Ghar Premium Office Interaction" class="about-img-main">
+              <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="Apnaa Ghar Real Estate & Interior Premium Office Interaction" class="about-img-main">
             </div>
             <div class="about-img-secondary-wrapper">
               <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80" alt="Mumbai Skyline Luxury Architecture" class="about-img-secondary">
@@ -382,7 +382,7 @@ $villaCount = $stmtVilla->fetchColumn();
 
           <!-- Right: Narrative Story, Mission, Counters -->
           <div class="about-texts-column reveal-el">
-            <span class="section-tag">About Apnaa Ghar</span>
+            <span class="section-tag">About Apnaa Ghar Real Estate & Interior</span>
             <h2 class="section-title text-cormorant">Crafting Lifestyles & Securing Legacies</h2>
             <div class="title-underline left"></div>
             
@@ -403,7 +403,7 @@ $villaCount = $stmtVilla->fetchColumn();
             </div>
             
             <p class="about-narrative">
-              With deep-rooted expertise in Chembur and surrounding suburbs of Mumbai, Apnaa Ghar Real Estate has established a benchmark of absolute transparency, personalized advice, and customer-first guidance.
+              With deep-rooted expertise in Chembur and surrounding suburbs of Mumbai, Apnaa Ghar Real Estate & Interior has established a benchmark of absolute transparency, personalized advice, and customer-first guidance.
             </p>
             
             <div class="about-tabs-container">
@@ -418,7 +418,7 @@ $villaCount = $stmtVilla->fetchColumn();
                   For over a decade, we have navigated Mumbai's dynamic real estate landscape, helping individuals buy, sell, and rent spaces that represent their dreams. We take pride in building lifetime partnerships rather than transacting properties.
                 </div>
                 <div class="tab-content" id="tab-mission">
-                  Our mission is to empower families with accurate property guidance, legal clarity, and transparent deals. We envision Apnaa Ghar as Mumbai's most trusted premium real estate advisor, setting new records in client satisfaction.
+                  Our mission is to empower families with accurate property guidance, legal clarity, and transparent deals. We envision Apnaa Ghar Real Estate & Interior as Mumbai's most trusted premium real estate advisor, setting new records in client satisfaction.
                 </div>
                 <div class="tab-content" id="tab-lgbtq">
                   As an officially certified LGBTQ+ friendly real estate agency, we proudly offer a safe, respectful, and highly inclusive environment. Finding your home should be an empowering experience for everyone, without prejudice.
@@ -434,14 +434,14 @@ $villaCount = $stmtVilla->fetchColumn();
       </div>
     </section>
 
-    <!-- 7. WHY CHOOSE APNAA GHAR -->
+    <!-- 7. WHY CHOOSE Apnaa Ghar Real Estate & Interior -->
     <section class="why-choose-section section-padding bg-dark text-white">
       <div class="container">
         <div class="section-header text-center reveal-el">
-          <span class="section-tag gold">Why Apnaa Ghar</span>
+          <span class="section-tag gold">Why Apnaa Ghar Real Estate & Interior</span>
           <h2 class="section-title text-cormorant text-white">Uncompromising Trust, Absolute Transparency</h2>
           <div class="title-underline"></div>
-          <p class="section-desc text-secondary">Why discerning home buyers and elite investors choose Apnaa Ghar for property consulting in Mumbai suburbs.</p>
+          <p class="section-desc text-secondary">Why discerning home buyers and elite investors choose Apnaa Ghar Real Estate & Interior for property consulting in Mumbai suburbs.</p>
         </div>
 
         <div class="why-grid-layout">
@@ -609,7 +609,7 @@ $villaCount = $stmtVilla->fetchColumn();
           <span class="section-tag">Google Rating 4.9 ★★★★★</span>
           <h2 class="section-title text-cormorant">Client Testimonials</h2>
           <div class="title-underline"></div>
-          <p class="section-desc">Read reviews left on Google by families and investors who trusted Apnaa Ghar Real Estate.</p>
+          <p class="section-desc">Read reviews left on Google by families and investors who trusted Apnaa Ghar Real Estate & Interior.</p>
         </div>
 
         <div class="testimonial-slider-container reveal-el">
@@ -626,7 +626,7 @@ $villaCount = $stmtVilla->fetchColumn();
                 </div>
               </div>
               <p class="testi-text">
-                "Excellent service and smooth experience with the Apnaa Ghar team. They simplified the entire legal documentation, verified the title, and guided us with complete transparency. Highly cooperative and professional."
+                "Excellent service and smooth experience with the Apnaa Ghar Real Estate & Interior team. They simplified the entire legal documentation, verified the title, and guided us with complete transparency. Highly cooperative and professional."
               </p>
               <div class="review-highlight-tag">Excellent service and smooth experience</div>
             </div>
@@ -642,7 +642,7 @@ $villaCount = $stmtVilla->fetchColumn();
                 </div>
               </div>
               <p class="testi-text">
-                "Apnaa Ghar Real Estate made selling our property a breeze. Their deep understanding of the local market helped us get the right valuation, and the entire paperwork process was handled flawlessly. Highly recommended!"
+                "Apnaa Ghar Real Estate & Interior made selling our property a breeze. Their deep understanding of the local market helped us get the right valuation, and the entire paperwork process was handled flawlessly. Highly recommended!"
               </p>
               <div class="review-highlight-tag">Expert market knowledge</div>
             </div>
@@ -674,7 +674,7 @@ $villaCount = $stmtVilla->fetchColumn();
                 </div>
               </div>
               <p class="testi-text">
-                "Time-saving support for registrations and title transfers. We didn't have to stand in queues at the registrar office—Apnaa Ghar team handled stamp duty payments, slot verification, and documentation seamlessly."
+                "Time-saving support for registrations and title transfers. We didn't have to stand in queues at the registrar office—Apnaa Ghar Real Estate & Interior team handled stamp duty payments, slot verification, and documentation seamlessly."
               </p>
               <div class="review-highlight-tag">Time-saving support</div>
             </div>
@@ -743,7 +743,7 @@ $villaCount = $stmtVilla->fetchColumn();
           <!-- Left: Agency Details, Reviews summary, Google Maps embed -->
           <div class="contact-details-column reveal-el">
             <div class="agency-contact-card">
-              <h3>Apnaa Ghar Real Estate</h3>
+              <h3>Apnaa Ghar Real Estate & Interior</h3>
               <p class="agency-address">
                 <i class="fa-solid fa-map-location-dot"></i> 
                 Building No.143, New Tilak Nagar, Near Tilak Nagar Railway Station, Chembur, Mumbai, Maharashtra 400089
@@ -767,7 +767,7 @@ $villaCount = $stmtVilla->fetchColumn();
                 allowfullscreen="" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade"
-                title="Apnaa Ghar Real Estate Location Map">
+                title="Apnaa Ghar Real Estate & Interior Location Map">
               </iframe>
               <a href="https://maps.google.com/?q=Building+No.143,+New+Tilak+Nagar,+Near+Tilak+Nagar+Railway+Station,+Chembur,+Mumbai" 
                  target="_blank" 
@@ -867,7 +867,7 @@ $villaCount = $stmtVilla->fetchColumn();
       <!-- Footer Logo & Intro -->
       <div class="footer-col-desc">
         <a href="#home" class="footer-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="logo.png" alt="Apnaa Ghar" style="height: 50px; object-fit: contain; mix-blend-mode: multiply;">
+          <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 50px; object-fit: contain; mix-blend-mode: multiply;">
         </a>
         <p class="footer-about-text">
           Mumbai's premium real estate consultancy serving Chembur, Tilak Nagar, Ghatkopar, Kurla and surrounding micro-markets since 2015. 4.9 rated.
@@ -924,7 +924,7 @@ $villaCount = $stmtVilla->fetchColumn();
     <!-- Footer Copyright -->
     <div class="footer-bottom-bar">
       <div class="container footer-bottom-flex">
-        <p class="copyright-txt">&copy; 2026 Apnaa Ghar Real Estate. All rights reserved. Designed with premium craft. LGBTQ+ Friendly.</p>
+        <p class="copyright-txt">&copy; 2026 Apnaa Ghar Real Estate & Interior. All rights reserved. Designed with premium craft. LGBTQ+ Friendly.</p>
         <div class="footer-legal-links">
           <a href="#home">Privacy Policy</a>
           <span>&middot;</span>

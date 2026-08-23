@@ -27,7 +27,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apnaa Ghar Admin</title>
+    <title>Apnaa Ghar Real Estate & Interior Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 CSS -->
@@ -163,6 +163,51 @@ $current_page = basename($_SERVER['PHP_SELF']);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            width: calc(100% - 280px);
+            max-width: 100%;
+        }
+        
+        /* Form Grids */
+        .admin-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .admin-card-body {
+            padding: 2rem;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            gap: 1rem;
+        }
+        
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+        
+        .topbar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
         }
         
         /* ==================== RESPONSIVE MOBILE ==================== */
@@ -172,8 +217,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
             /* Sidebar hidden off-screen by default on mobile */
             .sidebar {
                 transform: translateX(-100%);
-                width: 270px;
-                z-index: 200;
+                width: 280px;
+                max-width: 85vw;
+                z-index: 1000;
+                box-shadow: 10px 0 30px rgba(0,0,0,0.3);
             }
             .sidebar.open { transform: translateX(0); }
             
@@ -185,67 +232,111 @@ $current_page = basename($_SERVER['PHP_SELF']);
             
             /* Topbar adjustments for mobile */
             .topbar {
-                padding: 1rem;
+                padding: 0.75rem 1rem;
                 gap: 0.5rem;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
             }
-            .topbar-title { font-size: 1.1rem; white-space: normal; text-overflow: clip; max-width: 100%; flex: 1; min-width: 150px; }
+            .topbar-title {
+                font-size: 1.05rem;
+            }
             .admin-profile span { display: none; }
-            .admin-profile { margin-left: auto; }
+            .admin-profile { margin-left: auto; gap: 0.5rem; }
+            .btn-logout {
+                padding: 0.45rem 0.8rem !important;
+                font-size: 0.8rem !important;
+            }
             
             /* Show hamburger on mobile */
-            .hamburger-btn { display: flex; align-items: center; justify-content: center; }
+            .hamburger-btn {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                width: 38px;
+                height: 38px;
+                border-radius: 8px;
+                background: rgba(199, 154, 74, 0.12);
+                color: var(--sidebar-bg);
+                font-size: 1.15rem;
+                flex-shrink: 0;
+            }
             
             /* Content area padding reduced on mobile */
-            .content-area { padding: 1rem; }
+            .content-area { padding: 1rem 0.75rem; }
             
-            /* Cards on mobile: remove hover lift and reduce padding */
-            .card { padding: 1.25rem; }
+            /* Cards on mobile */
+            .card { padding: 1rem; margin-bottom: 1.25rem; }
             .card:hover { transform: none; }
+            .admin-card-body { padding: 1.25rem 1rem !important; }
             
             /* Tables: horizontal scroll on mobile */
-            .table-responsive, .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; padding: 1rem !important; }
-            table { min-width: 600px; }
-            th, td { padding: 0.8rem 0.5rem; font-size: 0.85rem; }
+            .table-responsive, .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 8px;
+                padding: 0.75rem !important;
+            }
+            table { min-width: 550px; }
+            th, td { padding: 0.75rem 0.5rem; font-size: 0.85rem; }
             
             /* Forms: single column on mobile */
+            .admin-form-grid,
             div[style*='grid-template-columns: 1fr 1fr'] {
                 display: flex !important;
                 flex-direction: column !important;
+                gap: 1rem !important;
+            }
+            
+            .form-control {
+                font-size: 16px !important; /* Prevents auto-zoom on iOS */
             }
             
             /* Stat cards grid on mobile */
-            .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+            .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 0.75rem !important; }
 
             /* Utility classes for responsive design */
-            .responsive-grid { grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important; gap: 1.5rem !important; }
-            .card-header-flex { flex-direction: column !important; align-items: stretch !important; padding: 1.25rem !important; }
-            .card-header-flex h3 { font-size: 1.4rem !important; text-align: center; }
-            .search-container { flex-direction: column; width: 100%; }
-            .search-container input { width: 100% !important; }
-            .search-container .btn { width: 100%; justify-content: center; }
+            .responsive-grid {
+                grid-template-columns: 1fr !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.25rem !important;
+            }
+            .card-header-flex {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                padding: 1.25rem 1rem !important;
+                gap: 0.75rem !important;
+            }
+            .card-header-flex h3 {
+                font-size: 1.3rem !important;
+                text-align: left;
+            }
+            .search-container {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.75rem !important;
+            }
+            .search-container input {
+                width: 100% !important;
+                box-sizing: border-box;
+                font-size: 16px !important;
+            }
+            .search-container .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* Full width buttons in form footers */
+            form button[type="submit"] {
+                width: 100%;
+            }
         }
         
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr !important; }
-            .topbar-title { font-size: 1rem; }
+            .topbar-title { font-size: 0.95rem; }
             .btn { padding: 0.65rem 1rem; font-size: 0.85rem; }
             .table-wrapper { padding: 0.5rem !important; }
         }
-        
-        .topbar {
-            background: var(--card-bg);
-            padding: 1.25rem 2.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--card-border);
-            position: sticky;
-            top: 0;
-            z-index: 90;
-        }
-        
-        .topbar-title { font-size: 1.25rem; font-weight: 600; color: var(--text-heading); }
         
         .admin-profile { display: flex; align-items: center; gap: 1.5rem; }
         .admin-profile span { font-weight: 500; font-size: 0.9rem; color: var(--text-heading); }
@@ -356,7 +447,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header" style="justify-content: flex-start; padding: 1.5rem;">
         <div style="background: #fff; padding: 6px; border-radius: 8px; margin-right: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--primary);">
-            <img src="../logo.png" alt="Apnaa Ghar" style="max-height: 35px; object-fit: contain;">
+            <img src="../logo.png" alt="Apnaa Ghar Real Estate & Interior" style="max-height: 35px; object-fit: contain;">
         </div>
         <h2 style="font-size: 1.15rem; margin: 0; color: #fff; letter-spacing: 0.5px;">ApnaaGhar</h2>
         <!-- Close button for mobile sidebar -->
@@ -380,22 +471,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <div class="main-content">
     <div class="topbar">
-        <!-- Hamburger for mobile -->
-        <button class="hamburger-btn" onclick="openSidebar()" id="hamburgerBtn" aria-label="Open menu">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <div class="topbar-title">
-            <?php 
-                if($current_page == 'dashboard.php') echo 'Dashboard Overview';
-                elseif($current_page == 'manage_properties.php' || $current_page == 'property_edit.php' || $current_page == 'property_add.php') echo 'Property Management';
-                elseif($current_page == 'manage_enquiries.php') echo 'Enquiries Management';
-                elseif($current_page == 'gallery.php') echo 'Gallery Management';
-                else echo 'Admin Panel';
-            ?>
+        <div class="topbar-left">
+            <!-- Hamburger for mobile -->
+            <button class="hamburger-btn" onclick="openSidebar()" id="hamburgerBtn" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <h1 class="topbar-title">
+                <?php 
+                    if($current_page == 'dashboard.php') echo 'Dashboard Overview';
+                    elseif($current_page == 'manage_properties.php' || $current_page == 'property_edit.php' || $current_page == 'property_add.php') echo 'Property Management';
+                    elseif($current_page == 'manage_enquiries.php') echo 'Enquiries Management';
+                    elseif($current_page == 'gallery.php') echo 'Gallery Management';
+                    else echo 'Admin Panel';
+                ?>
+            </h1>
         </div>
         <div class="admin-profile">
             <span><i class="fa-solid fa-circle-user" style="color:var(--primary); font-size:1.2rem; vertical-align:middle; margin-right:4px;"></i> <?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
-            <a href="logout.php" class="btn-logout" style="padding: 0.5rem 1rem; background: rgba(192,57,43,0.1); color: #C0392B; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.85rem; transition: all 0.2s;"><i class="fa-solid fa-power-off"></i> Logout</a>
+            <a href="logout.php" class="btn-logout"><i class="fa-solid fa-power-off"></i> Logout</a>
         </div>
     </div>
     

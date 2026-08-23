@@ -32,15 +32,15 @@ $properties = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC")->
             <i class="fa-solid fa-building" style="color: var(--primary); margin-right: 10px;"></i> Manage Properties
         </h3>
           <div class="search-container" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-              <div style="position: relative; width: 100%;">
+              <div style="position: relative; width: 100%; max-width: 350px;">
                   <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-                  <input type="text" id="propertySearch" class="form-control" placeholder="Search properties by title, location, status..." style="padding: 0.6rem 1rem 0.6rem 36px; width: 350px; border-radius: 8px; border: none; outline: none; background: rgba(255,255,255,0.95); color: #333; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                  <input type="text" id="propertySearch" class="form-control" placeholder="Search properties..." style="padding: 0.6rem 1rem 0.6rem 36px; width: 100%; border-radius: 8px; border: none; outline: none; background: rgba(255,255,255,0.95); color: #333; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
               </div>
               <a href="property_add.php" class="btn" style="background: var(--primary); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap;"><i class="fa-solid fa-plus"></i> Add New Property</a>
           </div>
     </div>
     
-    <div class="table-wrapper" style="overflow-x: auto; padding: 2rem;">
+    <div class="table-wrapper" style="overflow-x: auto; padding: 1.5rem;">
         <table>
             <thead>
                 <tr>

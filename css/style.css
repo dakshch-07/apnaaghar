@@ -1,5 +1,5 @@
 /* ==========================================================================
-   APNAA GHAR REAL ESTATE - LUXURY CSS DESIGN SYSTEM
+   Apnaa Ghar Real Estate & Interior - LUXURY CSS DESIGN SYSTEM
    ========================================================================== */
 
 /* 1. DESIGN VARIABLES & TOKENS */
@@ -1390,7 +1390,7 @@ a {
   color: var(--secondary-black);
 }
 
-/* 11. WHY CHOOSE APNAA GHAR (DARK) */
+/* 11. WHY CHOOSE Apnaa Ghar Real Estate & Interior (DARK) */
 .why-grid-layout {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -62,12 +62,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
-        $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, images_json, status, badge_status, badge_featured, bhk, size, description, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        
-        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json])) {
-            $success = "Property added successfully!";
-        } else {
-            $error = "Database error occurred.";
+        try {
+            $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, images_json, status, badge_status, badge_featured, bhk, size, description, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json])) {
+                $success = "Property added successfully!";
+            } else {
+                $error = "Database error occurred.";
+            }
+        } catch(PDOException $ex) {
+            // Auto fallback if description column missing
+            if (strpos($ex->getMessage(), 'description') !== false || $ex->getCode() == '42S22') {
+                try {
+                    $pdo->exec("ALTER TABLE properties ADD COLUMN description LONGTEXT NULL AFTER size");
+                    $stmt = $pdo->prepare("INSERT INTO properties (title, type, location, price, image_url, images_json, status, badge_status, badge_featured, bhk, size, description, highlights_json, connectivity_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json])) {
+                        $success = "Property added successfully!";
+                    } else {
+                        $error = "Database error occurred.";
+                    }
+                } catch(PDOException $e2) {
+                    $error = "Database error: " . $e2->getMessage();
+                }
+            } else {
+                $error = "Database error: " . $ex->getMessage();
+            }
         }
     } elseif(empty($error)) {
         $error = "Title and Main Image are required.";
@@ -76,14 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <div class="card fade-up" style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
-    <div style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div class="card-header-flex" style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <h3 style="margin: 0; color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px;">
             <i class="fa-solid fa-plus-circle" style="color: var(--primary); margin-right: 10px;"></i> Add New Property
         </h3>
         <a href="manage_properties.php" class="btn" style="background: rgba(255,255,255,0.1); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px;"><i class="fa-solid fa-arrow-left"></i> Back to Properties</a>
     </div>
     
-    <div style="padding: 2rem;">
+    <div class="admin-card-body" style="padding: 2rem;">
     
     <?php if(!empty($error)): ?>
         <div style="background: #fee2e2; color: #b91c1c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #fecaca;"><?php echo $error; ?></div>
@@ -94,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php endif; ?>
 
     <form action="" method="POST" enctype="multipart/form-data">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="admin-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             
             <div class="form-group">
                 <label>Property Title</label>

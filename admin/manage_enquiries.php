@@ -206,6 +206,29 @@ $enquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            max-width: 92vw !important;
+            max-height: 90vh !important;
+            overflow-y: auto !important;
+            margin: 1rem;
+        }
+        .modal-header-luxe {
+            padding: 1rem 1.25rem !important;
+        }
+        .modal-header-luxe h3 {
+            font-size: 1.3rem !important;
+        }
+        .modal-body-luxe {
+            padding: 1.25rem 1rem !important;
+        }
+        .info-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+    }
 </style>
 
 <!-- View Message Modal -->

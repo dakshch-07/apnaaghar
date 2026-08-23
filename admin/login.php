@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apnaa Ghar - Admin Login</title>
+    <title>Apnaa Ghar Real Estate & Interior - Admin Login</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
@@ -316,8 +316,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="login-card">
     <div class="login-left">
-        <img src="../logo.png" alt="Apnaa Ghar">
-        <p>APNAA GHAR ADMIN</p>
+        <img src="../logo.png" alt="Apnaa Ghar Real Estate & Interior">
+        <p>Apnaa Ghar Real Estate & Interior ADMIN</p>
     </div>
     
     <div class="login-right">

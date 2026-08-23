@@ -1,5 +1,5 @@
 /* ==========================================================================
-   APNAA GHAR REAL ESTATE - PREMIUM JS SYSTEM (GSAP & ScrollTrigger)
+   Apnaa Ghar Real Estate & Interior - PREMIUM JS SYSTEM (GSAP & ScrollTrigger)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'Curating modern blueprints...',
     'Verifying premium listings...',
     'Structuring transparent deals...',
-    'Welcome to Apnaa Ghar Chembur...'
+    'Welcome to Apnaa Ghar Real Estate & Interior Chembur...'
   ];
   const preloaderStatusText = document.querySelector('.preloader-status');
   
@@ -1795,7 +1795,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Configure WhatsApp Link
     if (serviceWhatsappBtn) {
-      const whatsappText = encodeURIComponent(`Hi Apnaa Ghar Team, I am interested in inquiring about your "${data.title}" service. Please share details on how to proceed.`);
+      const whatsappText = encodeURIComponent(`Hi Apnaa Ghar Real Estate & Interior Team, I am interested in inquiring about your "${data.title}" service. Please share details on how to proceed.`);
       serviceWhatsappBtn.href = `https://wa.me/917021316956?text=${whatsappText}`;
     }
 

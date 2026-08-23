@@ -73,22 +73,22 @@ foreach ($properties as $prop) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Primary Meta Tags -->
-  <title>Apnaa Ghar Real Estate | Premium Properties in Chembur, Mumbai</title>
-  <meta name="title" content="Apnaa Ghar Real Estate | Premium Properties in Chembur, Mumbai">
+  <title>Apnaa Ghar Real Estate & Interior | Premium Properties in Chembur, Mumbai</title>
+  <meta name="title" content="Apnaa Ghar Real Estate & Interior | Premium Properties in Chembur, Mumbai">
   <meta name="description" content="Discover luxury apartments, penthouses, commercial spaces, and villas in Chembur, Mumbai. Guided by trust, integrity, and transparency. 4.9 rated agency with 58+ reviews.">
-  <meta name="keywords" content="Apnaa Ghar Real Estate, Chembur Real Estate, Mumbai Luxury Properties, Buy Flat Chembur, Real Estate Agent Tilak Nagar, Kurla, Ghatkopar, Mumbai">
+  <meta name="keywords" content="Apnaa Ghar Real Estate & Interior, Chembur Real Estate, Mumbai Luxury Properties, Buy Flat Chembur, Real Estate Agent Tilak Nagar, Kurla, Ghatkopar, Mumbai">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://apnaagharrealestate.in/">
-  <meta property="og:title" content="Apnaa Ghar Real Estate | Luxury Homes in Mumbai">
+  <meta property="og:title" content="Apnaa Ghar Real Estate & Interior | Luxury Homes in Mumbai">
   <meta property="og:description" content="Discover premium apartments, modern interiors, and investment properties in Chembur, Ghatkopar, and Tilak Nagar. 4.9 Google rating.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://apnaagharrealestate.in/">
-  <meta property="twitter:title" content="Apnaa Ghar Real Estate | Luxury Homes in Mumbai">
+  <meta property="twitter:title" content="Apnaa Ghar Real Estate & Interior | Luxury Homes in Mumbai">
   <meta property="twitter:description" content="Discover premium apartments, modern interiors, and investment properties in Chembur, Ghatkopar, and Tilak Nagar. 4.9 Google rating.">
   <meta property="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&h=630&q=80">
 
@@ -119,7 +119,7 @@ foreach ($properties as $prop) {
   {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Apnaa Ghar Real Estate",
+    "name": "Apnaa Ghar Real Estate & Interior",
     "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
     "@id": "https://apnaagharrealestate.in/#agent",
     "url": "https://apnaagharrealestate.in/",
@@ -175,8 +175,8 @@ foreach ($properties as $prop) {
   <div id="preloader" class="preloader">
     <div class="preloader-content">
       <div class="preloader-logo" style="margin-bottom: 1.5rem;">
-        <img src="logo.png" alt="Apnaa Ghar" style="height: 120px; padding: 15px; background: #ffffff; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin-bottom: 10px;">
-        <span class="logo-text-cormorant" style="margin-top: 15px; display: block;">Apnaa Ghar</span>
+        <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 120px; padding: 15px; background: #ffffff; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin-bottom: 10px;">
+        <span class="logo-text-cormorant" style="margin-top: 15px; display: block;">Apnaa Ghar Real Estate & Interior</span>
         <span class="logo-subtext">REAL ESTATE</span>
       </div>
       <div class="preloader-bar-container">
@@ -194,7 +194,7 @@ foreach ($properties as $prop) {
   <header id="header" class="header">
     <div class="container navbar-container">
       <a href="index.php#home" class="logo magnetic" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-        <img src="logo.png" alt="Apnaa Ghar Real Estate" style="height: 55px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
+        <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 55px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
       </a>
       
       <nav id="nav-menu" class="nav-menu">
@@ -224,7 +224,7 @@ foreach ($properties as $prop) {
   <!-- MOBILE NAVIGATION DRAWER -->
   <div class="mobile-drawer" id="mobile-drawer">
     <div class="mobile-drawer-header" style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem;">
-      <img src="logo.png" alt="Apnaa Ghar" style="height: 40px; object-fit: contain; mix-blend-mode: multiply;">
+      <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 40px; object-fit: contain; mix-blend-mode: multiply;">
       <button class="drawer-close" id="drawer-close">&times;</button>
     </div>
     <nav class="mobile-drawer-nav">
@@ -407,7 +407,7 @@ foreach ($properties as $prop) {
       <!-- Footer Logo & Intro -->
       <div class="footer-col-desc">
         <a href="index.php#home" class="footer-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="logo.png" alt="Apnaa Ghar" style="height: 50px; object-fit: contain; mix-blend-mode: multiply;">
+          <img src="logo.png" alt="Apnaa Ghar Real Estate & Interior" style="height: 50px; object-fit: contain; mix-blend-mode: multiply;">
         </a>
         <p class="footer-about-text">
           Mumbai's premium real estate consultancy serving Chembur, Tilak Nagar, Ghatkopar, Kurla and surrounding micro-markets since 2015. 4.9 rated.
@@ -464,7 +464,7 @@ foreach ($properties as $prop) {
     <!-- Footer Copyright -->
     <div class="footer-bottom-bar">
       <div class="container footer-bottom-flex">
-        <p class="copyright-txt">&copy; 2026 Apnaa Ghar Real Estate. All rights reserved. Designed with premium craft. LGBTQ+ Friendly.</p>
+        <p class="copyright-txt">&copy; 2026 Apnaa Ghar Real Estate & Interior. All rights reserved. Designed with premium craft. LGBTQ+ Friendly.</p>
         <div class="footer-legal-links">
           <a href="index.php#home">Privacy Policy</a>
           <span class="footer-dot">•</span>

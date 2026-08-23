@@ -91,12 +91,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $images_json = !empty($final_images) ? json_encode($final_images) : NULL;
     
     if (empty($error) && !empty($title) && !empty($image_url)) {
-        $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, description=?, highlights_json=?, connectivity_json=? WHERE id=?");
-        
-        if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json, $id])) {
-            $success = "Property updated successfully!";
-        } else {
-            $error = "Database error occurred.";
+        try {
+            $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, description=?, highlights_json=?, connectivity_json=? WHERE id=?");
+            
+            if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json, $id])) {
+                $success = "Property updated successfully!";
+            } else {
+                $error = "Database error occurred.";
+            }
+        } catch(PDOException $ex) {
+            // Auto fallback if description column missing
+            if (strpos($ex->getMessage(), 'description') !== false || $ex->getCode() == '42S22') {
+                try {
+                    $pdo->exec("ALTER TABLE properties ADD COLUMN description LONGTEXT NULL AFTER size");
+                    $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, description=?, highlights_json=?, connectivity_json=? WHERE id=?");
+                    if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json, $id])) {
+                        $success = "Property updated successfully!";
+                    } else {
+                        $error = "Database error occurred.";
+                    }
+                } catch(PDOException $e2) {
+                    $error = "Database error: " . $e2->getMessage();
+                }
+            } else {
+                $error = "Database error: " . $ex->getMessage();
+            }
         }
     } elseif(empty($error)) {
         $error = "Title and Image are required.";
@@ -121,14 +140,14 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
 ?>
 
 <div class="card fade-up" style="padding: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
-    <div style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div class="card-header-flex" style="background: var(--sidebar-bg); padding: 1.5rem 2rem; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <h3 style="margin: 0; color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.5px;">
             <i class="fa-solid fa-pen-to-square" style="color: var(--primary); margin-right: 10px;"></i> Edit Property
         </h3>
         <a href="manage_properties.php" class="btn" style="background: rgba(255,255,255,0.1); color: #fff; border: none; font-weight: 600; letter-spacing: 0.5px;"><i class="fa-solid fa-arrow-left"></i> Back to Properties</a>
     </div>
     
-    <div style="padding: 2rem;">
+    <div class="admin-card-body" style="padding: 2rem;">
     
     <?php if(!empty($error)): ?>
         <div style="background: #fee2e2; color: #b91c1c; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #fecaca;"><?php echo $error; ?></div>
@@ -141,7 +160,7 @@ $connectivity_str = is_array($connectivity_arr) ? implode("\n", $connectivity_ar
     <form action="" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="current_image" value="<?php echo htmlspecialchars($prop['image_url']); ?>">
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="admin-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             
             <div class="form-group">
                 <label>Property Title</label>
