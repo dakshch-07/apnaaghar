@@ -1110,6 +1110,7 @@ $villaCount = $stmtVilla->fetchColumn();
       const propertySwipers = document.querySelectorAll('.property-card-slider');
       propertySwipers.forEach(function(slider) {
         new Swiper(slider, {
+          direction: 'vertical',
           loop: true,
           autoplay: {
             delay: 1800,
