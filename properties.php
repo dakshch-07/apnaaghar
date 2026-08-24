@@ -454,7 +454,7 @@ foreach ($properties as $prop) {
         <!-- Social Icons -->
         <div class="footer-social-links">
           <a href="https://facebook.com" class="social-icon magnetic" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="https://instagram.com" class="social-icon magnetic" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.instagram.com/apnaaghar24?igsi=c3JkaG5wcXJmdHRu" class="social-icon magnetic" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
           <a href="https://linkedin.com" class="social-icon magnetic" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
           <a href="https://wa.me/917021316956" class="social-icon magnetic" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
