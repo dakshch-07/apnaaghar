@@ -95,22 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $error = "Database error occurred.";
             }
         } catch(PDOException $ex) {
-            // Auto fallback if description column missing
-            if (strpos($ex->getMessage(), 'description') !== false || $ex->getCode() == '42S22') {
-                try {
-                    $pdo->exec("ALTER TABLE properties ADD COLUMN description LONGTEXT NULL AFTER size");
-                    $stmt = $pdo->prepare("UPDATE properties SET title=?, type=?, location=?, price=?, image_url=?, images_json=?, status=?, badge_status=?, badge_featured=?, bhk=?, size=?, description=?, highlights_json=?, connectivity_json=? WHERE id=?");
-                    if ($stmt->execute([$title, $type, $location, $price, $image_url, $images_json, $status, $badge_status, $badge_featured, $bhk, $size, $description, $highlights_json, $connectivity_json, $id])) {
-                        $success = "Property updated successfully!";
-                    } else {
-                        $error = "Database error occurred.";
-                    }
-                } catch(PDOException $e2) {
-                    $error = "Database error: " . $e2->getMessage();
-                }
-            } else {
-                $error = "Database error: " . $ex->getMessage();
-            }
+            $error = "Database error (original): " . $ex->getMessage();
         }
     } elseif(empty($error)) {
         $error = "Title and Image are required.";
